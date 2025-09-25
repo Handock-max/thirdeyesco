@@ -25,7 +25,7 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
+        <BrowserRouter basename={import.meta.env.PROD ? "/thirdeyesco" : ""}>
           <Routes>
             <Route path="/" element={<Index />} />
             {/* Ajoutez toutes vos routes personnalisées au-dessus de la route catch-all "*" */}
