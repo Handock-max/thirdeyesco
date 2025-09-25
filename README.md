@@ -1,73 +1,240 @@
-# Welcome to your Lovable project
+# 🎯 Third Eyes Co. - Plateforme de Formation Data Science & IA
 
-## Project info
+> **Formations professionnelles en Data Science et Intelligence Artificielle**  
+> Développez vos compétences avec nos programmes conçus pour l'économie numérique.
 
-**URL**: https://lovable.dev/projects/2ad4f04d-df01-4b39-a20c-136be69407d8
+[![Deploy to GitHub Pages](https://github.com/your-username/thirdeyesco/actions/workflows/deploy.yml/badge.svg)](https://github.com/your-username/thirdeyesco/actions/workflows/deploy.yml)
+[![React](https://img.shields.io/badge/React-18.3.1-blue.svg)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue.svg)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4.17-blue.svg)](https://tailwindcss.com/)
+[![Supabase](https://img.shields.io/badge/Supabase-Database-green.svg)](https://supabase.com/)
 
-## How can I edit this code?
+## ✨ Fonctionnalités
 
-There are several ways of editing your application.
+- 🎨 **Design moderne** avec thème clair/sombre
+- 📱 **Responsive** - Optimisé pour tous les appareils
+- 📝 **Formulaire d'inscription** multi-étapes intuitif
+- 🗄️ **Base de données** Supabase intégrée
+- 🚀 **Déploiement automatique** sur GitHub Pages
+- ⚡ **Performance optimisée** avec Vite et React
+- 🎯 **UX/UI soignée** avec animations et transitions
 
-**Use Lovable**
+## 🚀 Démarrage rapide
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/2ad4f04d-df01-4b39-a20c-136be69407d8) and start prompting.
+### Prérequis
 
-Changes made via Lovable will be committed automatically to this repo.
+- Node.js 18+ 
+- npm ou yarn
+- Compte Supabase
+- Compte GitHub
 
-**Use your preferred IDE**
+### Installation
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+1. **Cloner le repository**
+   ```bash
+   git clone https://github.com/your-username/thirdeyesco.git
+   cd thirdeyesco
+   ```
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+2. **Installer les dépendances**
+   ```bash
+   npm install
+   ```
 
-Follow these steps:
+3. **Configuration Supabase**
+   - Créez un projet sur [Supabase](https://supabase.com)
+   - Copiez `env.example` vers `.env`
+   - Remplissez vos clés Supabase
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+4. **Démarrer le serveur de développement**
+   ```bash
+   npm run dev
+   ```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+5. **Ouvrir dans le navigateur**
+   ```
+   http://localhost:8080
+   ```
 
-# Step 3: Install the necessary dependencies.
-npm i
+## 🛠️ Scripts disponibles
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```bash
+# Développement
+npm run dev              # Serveur de développement
+npm run build            # Build de production
+npm run build:github     # Build optimisé pour GitHub Pages
+npm run preview          # Preview du build local
+npm run preview:github   # Preview avec base GitHub Pages
+
+# Qualité du code
+npm run lint             # Vérification ESLint
 ```
 
-**Edit a file directly in GitHub**
+## 🏗️ Architecture
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Technologies utilisées
 
-**Use GitHub Codespaces**
+- **Frontend** : React 18 + TypeScript
+- **Styling** : Tailwind CSS + shadcn/ui
+- **Build** : Vite
+- **Base de données** : Supabase
+- **Déploiement** : GitHub Pages + GitHub Actions
+- **Thème** : Système de thème clair/sombre personnalisé
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Structure du projet
 
-## What technologies are used for this project?
+```
+src/
+├── components/          # Composants React
+│   ├── ui/             # Composants UI de base
+│   ├── WelcomePage.tsx # Page d'accueil
+│   └── FormationInscription.tsx # Formulaire
+├── contexts/           # Contextes React
+├── hooks/              # Hooks personnalisés
+├── lib/                # Utilitaires
+├── pages/              # Pages de l'application
+└── assets/             # Ressources statiques
+```
 
-This project is built with:
+## 🎨 Personnalisation
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Modifier les formations
 
-## How can I deploy this project?
+Éditez `src/components/FormationInscription.tsx` :
 
-Simply open [Lovable](https://lovable.dev/projects/2ad4f04d-df01-4b39-a20c-136be69407d8) and click on Share -> Publish.
+```typescript
+const FORMATIONS_CONFIG = {
+  individuelle: [
+    { id: 'data-debutant', nom: 'Data Débutant (2 jours)', prix: 25000 },
+    // Ajoutez vos formations
+  ],
+  // ...
+};
+```
 
-## Can I connect a custom domain to my Lovable project?
+### Modifier les couleurs
 
-Yes, you can!
+Éditez `src/index.css` :
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+```css
+:root {
+  --primary: 240 100% 60%; /* Votre couleur principale */
+}
+```
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+### Ajouter des images
+
+1. Placez vos images dans `src/assets/images/`
+2. Importez-les dans vos composants
+3. Référencez-les dans le code
+
+## 🚀 Déploiement
+
+### GitHub Pages (automatique)
+
+1. Poussez votre code sur GitHub
+2. Allez dans **Settings > Pages**
+3. Sélectionnez **GitHub Actions**
+4. Le déploiement se fait automatiquement
+
+### Déploiement manuel
+
+```bash
+npm run build:github
+# Uploadez le dossier dist/ sur votre serveur
+```
+
+## 📊 Base de données
+
+### Configuration Supabase
+
+1. Créez un projet Supabase
+2. Exécutez le script SQL fourni dans la documentation
+3. Configurez les variables d'environnement
+
+### Structure de la table
+
+```sql
+CREATE TABLE inscriptions (
+  id UUID PRIMARY KEY,
+  nom_complet VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  telephone VARCHAR(50) NOT NULL,
+  ville VARCHAR(100) NOT NULL,
+  type_formation VARCHAR(20) NOT NULL,
+  formation_specifique VARCHAR(255) NOT NULL,
+  prix INTEGER NOT NULL,
+  mode_formation VARCHAR(20) NOT NULL,
+  motivation TEXT NOT NULL,
+  centres_interet TEXT[] DEFAULT '{}',
+  accepte_conditions BOOLEAN NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+## 🔧 Configuration avancée
+
+### Variables d'environnement
+
+```env
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key
+VITE_WHATSAPP_NUMBER=+22500000000
+VITE_CONTACT_EMAIL=contact@thirdeyesco.com
+```
+
+### Thème personnalisé
+
+Le système de thème supporte :
+- Thème clair
+- Thème sombre  
+- Thème système (suit les préférences OS)
+
+## 📱 Responsive Design
+
+Le site est optimisé pour :
+- 📱 Mobile (320px+)
+- 📱 Tablette (768px+)
+- 💻 Desktop (1024px+)
+- 🖥️ Large screens (1440px+)
+
+## 🎯 Fonctionnalités du formulaire
+
+- ✅ **Validation en temps réel**
+- 📊 **Barre de progression**
+- 💾 **Sauvegarde automatique** (Supabase)
+- 📱 **Design responsive**
+- 🎨 **Animations fluides**
+- 🔄 **Gestion d'erreurs**
+
+## 🤝 Contribution
+
+1. Fork le projet
+2. Créez une branche (`git checkout -b feature/AmazingFeature`)
+3. Committez vos changements (`git commit -m 'Add AmazingFeature'`)
+4. Poussez vers la branche (`git push origin feature/AmazingFeature`)
+5. Ouvrez une Pull Request
+
+## 📄 Licence
+
+Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
+
+## 📞 Support
+
+- 📧 Email : contact@thirdeyesco.com
+- 💬 WhatsApp : +22500000000
+- 🐛 Issues : [GitHub Issues](https://github.com/your-username/thirdeyesco/issues)
+
+## 🙏 Remerciements
+
+- [React](https://reactjs.org/) - Framework JavaScript
+- [Tailwind CSS](https://tailwindcss.com/) - Framework CSS
+- [Supabase](https://supabase.com/) - Backend as a Service
+- [shadcn/ui](https://ui.shadcn.com/) - Composants UI
+- [Lucide React](https://lucide.dev/) - Icônes
+
+---
+
+**Développé avec ❤️ par Third Eyes Co.**
+
+*Transformez votre carrière avec nos formations en Data Science et IA*

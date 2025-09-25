@@ -2,21 +2,36 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Brain, Sparkles, Users, BarChart, Eye, ArrowRight } from 'lucide-react';
+import ThemeToggle from '@/components/ThemeToggle';
 import thirdEyesLogo from '@/assets/third-eyes-logo.png';
 
+/**
+ * Props pour le composant WelcomePage
+ */
 interface WelcomePageProps {
+  /** Fonction appelée quand l'utilisateur clique sur le bouton d'inscription */
   onStartInscription: () => void;
 }
 
+/**
+ * Composant de la page d'accueil Third Eyes Co.
+ * Affiche les informations sur les formations et permet de commencer l'inscription
+ */
 const WelcomePage: React.FC<WelcomePageProps> = ({ onStartInscription }) => {
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Logo en arrière-plan flouté */}
+      {/* Logo en arrière-plan flouté pour l'effet visuel */}
       <div 
         className="logo-backdrop"
         style={{ backgroundImage: `url(${thirdEyesLogo})` }}
       />
       
+      {/* Bouton de basculement de thème en haut à droite */}
+      <div className="absolute top-4 right-4 z-10">
+        <ThemeToggle />
+      </div>
+      
+      {/* Contenu principal de la page d'accueil */}
       <div className="w-full max-w-4xl">
         <div className="text-center mb-12">
           {/* Logo principal */}

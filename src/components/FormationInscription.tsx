@@ -10,6 +10,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Progress } from '@/components/ui/progress';
 import { ChevronRight, ChevronLeft, Eye, Users, Brain, BarChart, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useSupabase } from '@/hooks/useSupabase';
+import ThemeToggle from '@/components/ThemeToggle';
 import thirdEyesLogo from '@/assets/third-eyes-logo.png';
 
 // Types pour le formulaire - COMPLETER selon les besoins spécifiques
@@ -76,6 +78,9 @@ const FormationInscription: React.FC = () => {
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { toast } = useToast();
+  
+  // Hook Supabase pour la sauvegarde des données
+  const { saveInscription, isLoading: isSupabaseLoading, error: supabaseError } = useSupabase();
 
   // Fonction pour calculer le prix automatiquement - LOGIQUE METIER IMPORTANTE
   const calculerPrix = (type: string, formation: string) => {
@@ -130,21 +135,38 @@ const FormationInscription: React.FC = () => {
     }
   };
 
-  // Soumission du formulaire - CONNECTER A SUPABASE
+  // Soumission du formulaire - CONNECTE A SUPABASE
   const handleSubmit = async () => {
     try {
-      // TODO: CONNECTER A SUPABASE POUR SAUVEGARDER LES DONNEES
-      console.log('Données du formulaire à sauvegarder:', formData);
+      // Préparation des données pour Supabase
+      const inscriptionData = {
+        nom_complet: formData.nomComplet,
+        email: formData.email,
+        telephone: formData.telephone,
+        ville: formData.ville,
+        type_formation: formData.typeFormation as 'individuelle' | 'pack' | 'cycle',
+        formation_specifique: formData.formationSpecifique,
+        prix: formData.prix,
+        mode_formation: formData.modeFormation as 'presentiel' | 'enligne' | 'mixte',
+        motivation: formData.motivation,
+        centres_interet: formData.centresInteret,
+        accepte_conditions: formData.accepteConditions
+      };
+
+      // Sauvegarde dans Supabase
+      const result = await saveInscription(inscriptionData);
       
-      // Simulation d'envoi (REMPLACER par vraie logique Supabase)
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      setIsSubmitted(true);
-      toast({
-        title: "Inscription réussie !",
-        description: `Merci ${formData.nomComplet}, nous vous recontacterons sous 24h.`
-      });
+      if (result.success) {
+        setIsSubmitted(true);
+        toast({
+          title: "Inscription réussie !",
+          description: `Merci ${formData.nomComplet}, nous vous recontacterons sous 24h.`
+        });
+      } else {
+        throw new Error(result.error || 'Erreur lors de la sauvegarde');
+      }
     } catch (error) {
+      console.error('Erreur lors de l\'inscription:', error);
       toast({
         title: "Erreur",
         description: "Une erreur est survenue. Veuillez réessayer.",
@@ -155,7 +177,7 @@ const FormationInscription: React.FC = () => {
 
   // Fonction pour contacter WhatsApp - REMPLACER par votre numéro
   const contactWhatsApp = () => {
-    const numeroWhatsApp = "+22500000000"; // REMPLACER par votre vrai numéro
+    const numeroWhatsApp = "+22896933995"; // REMPLACER par votre vrai numéro
     const message = `Bonjour, je viens de m'inscrire à la formation ${formData.formationSpecifique}. Mon nom est ${formData.nomComplet}.`;
     const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank');
@@ -170,6 +192,11 @@ const FormationInscription: React.FC = () => {
           className="logo-backdrop"
           style={{ backgroundImage: `url(${thirdEyesLogo})` }}
         />
+        
+        {/* Bouton de basculement de thème en haut à droite */}
+        <div className="absolute top-4 right-4 z-10">
+          <ThemeToggle />
+        </div>
         
         <Card className="glass-card w-full max-w-lg success-message fade-in">
           <CardContent className="p-8 text-center">
@@ -550,6 +577,11 @@ const FormationInscription: React.FC = () => {
         style={{ backgroundImage: `url(${thirdEyesLogo})` }}
       />
       
+      {/* Bouton de basculement de thème en haut à droite */}
+      <div className="absolute top-4 right-4 z-10">
+        <ThemeToggle />
+      </div>
+      
       <Card className="glass-card w-full max-w-2xl fade-in">
         <CardHeader className="text-center pb-2">
           <div className="flex justify-center mb-4">
@@ -601,11 +633,20 @@ const FormationInscription: React.FC = () => {
             ) : (
               <Button
                 onClick={handleSubmit}
-                disabled={!isStepValid(currentStep)}
+                disabled={!isStepValid(currentStep) || isSupabaseLoading}
                 className="btn-primary-glow flex items-center"
               >
-                Finaliser l'inscription
-                <Sparkles className="w-4 h-4 ml-1" />
+                {isSupabaseLoading ? (
+                  <>
+                    <div className="w-4 h-4 mr-2 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    Sauvegarde...
+                  </>
+                ) : (
+                  <>
+                    Finaliser l'inscription
+                    <Sparkles className="w-4 h-4 ml-1" />
+                  </>
+                )}
               </Button>
             )}
           </div>

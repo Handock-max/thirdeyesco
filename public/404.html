@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page non trouvée - Third Eyes Co.</title>
+    <script>
+        // Redirection automatique vers la page d'accueil pour les routes SPA
+        // Ceci est nécessaire pour que React Router fonctionne correctement sur GitHub Pages
+        var pathSegmentsToKeep = 1;
+        
+        var l = window.location;
+        l.replace(
+            l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+            l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
+            l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+            (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+            l.hash
+        );
+    </script>
+</head>
+<body>
+    <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
+        <h1>Page non trouvée</h1>
+        <p>Redirection en cours vers la page d'accueil...</p>
+        <p>Si la redirection ne fonctionne pas, <a href="/thirdeyesco/">cliquez ici</a>.</p>
+    </div>
+</body>
+</html>

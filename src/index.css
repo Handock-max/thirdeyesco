@@ -6,53 +6,54 @@
 All colors MUST be HSL. Design inspiré des meilleures plateformes EdTech */
 
 @layer base {
+  /* Thème clair par défaut */
   :root {
-    /* Couleurs principales - Thème Tech Moderne */
-    --background: 220 26% 14%;
-    --foreground: 210 40% 98%;
+    /* Couleurs principales - Thème clair */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
 
-    /* Glassmorphism cards */
-    --card: 220 26% 14% / 0.8;
-    --card-foreground: 210 40% 98%;
-    --card-border: 240 40% 90% / 0.2;
+    /* Glassmorphism cards pour thème clair */
+    --card: 0 0% 100% / 0.8;
+    --card-foreground: 222.2 84% 4.9%;
+    --card-border: 214.3 31.8% 91.4% / 0.5;
 
-    --popover: 220 26% 14%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
 
-    /* Gradients Tech - Bleu vers Violet */
-    --primary: 240 100% 70%;
-    --primary-foreground: 210 40% 98%;
-    --primary-glow: 260 100% 75%;
+    /* Gradients Tech - Bleu vers Violet pour thème clair */
+    --primary: 240 100% 60%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 260 100% 65%;
 
-    --secondary: 240 30% 25%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 210 40% 98%;
+    --secondary-foreground: 222.2 84% 4.9%;
 
-    --muted: 240 20% 20%;
-    --muted-foreground: 240 20% 70%;
+    --muted: 210 40% 98%;
+    --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 260 80% 65%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 240 100% 60%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    /* Bordures et inputs avec effet glassmorphism */
-    --border: 240 40% 90% / 0.2;
-    --input: 240 20% 20%;
-    --input-border: 240 40% 90% / 0.3;
-    --ring: 240 100% 70%;
+    /* Bordures et inputs pour thème clair */
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --input-border: 214.3 31.8% 91.4%;
+    --ring: 240 100% 60%;
 
     --radius: 1rem;
 
-    /* Gradients personnalisés Third Eyes */
-    --gradient-primary: linear-gradient(135deg, hsl(240, 100%, 70%), hsl(260, 100%, 75%));
-    --gradient-background: linear-gradient(135deg, hsl(220, 26%, 14%), hsl(240, 30%, 18%));
-    --gradient-card: linear-gradient(145deg, hsl(240, 20%, 20% / 0.9), hsl(260, 20%, 22% / 0.9));
+    /* Gradients personnalisés Third Eyes - Thème clair */
+    --gradient-primary: linear-gradient(135deg, hsl(240, 100%, 60%), hsl(260, 100%, 65%));
+    --gradient-background: linear-gradient(135deg, hsl(0, 0%, 100%), hsl(210, 40%, 98%));
+    --gradient-card: linear-gradient(145deg, hsl(0, 0%, 100% / 0.9), hsl(210, 40%, 98% / 0.9));
     
-    /* Ombres avec glow effect */
-    --shadow-glow: 0 0 40px hsl(240, 100%, 70% / 0.3);
-    --shadow-card: 0 20px 60px hsl(0, 0%, 0% / 0.3);
-    --shadow-button: 0 10px 30px hsl(240, 100%, 70% / 0.4);
+    /* Ombres avec glow effect pour thème clair */
+    --shadow-glow: 0 0 40px hsl(240, 100%, 60% / 0.2);
+    --shadow-card: 0 20px 60px hsl(0, 0%, 0% / 0.1);
+    --shadow-button: 0 10px 30px hsl(240, 100%, 60% / 0.3);
     
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -62,34 +63,32 @@ All colors MUST be HSL. Design inspiré des meilleures plateformes EdTech */
     --backdrop-blur: blur(20px);
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
+  /* Thème sombre */
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
 
-    --card: 222.2 84% 4.9%;
+    /* Glassmorphism cards pour thème sombre */
+    --card: 222.2 84% 4.9% / 0.8;
     --card-foreground: 210 40% 98%;
+    --card-border: 217.2 32.6% 17.5% / 0.5;
 
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    /* Gradients Tech - Bleu vers Violet pour thème sombre */
+    --primary: 240 100% 70%;
+    --primary-foreground: 222.2 84% 4.9%;
+    --primary-glow: 260 100% 75%;
 
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
@@ -97,15 +96,28 @@ All colors MUST be HSL. Design inspiré des meilleures plateformes EdTech */
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 240 100% 70%;
+    --accent-foreground: 222.2 84% 4.9%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
+    /* Bordures et inputs pour thème sombre */
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --input-border: 217.2 32.6% 17.5%;
+    --ring: 240 100% 70%;
+
+    /* Gradients personnalisés Third Eyes - Thème sombre */
+    --gradient-primary: linear-gradient(135deg, hsl(240, 100%, 70%), hsl(260, 100%, 75%));
+    --gradient-background: linear-gradient(135deg, hsl(222.2, 84%, 4.9%), hsl(217.2, 32.6%, 17.5%));
+    --gradient-card: linear-gradient(145deg, hsl(222.2, 84%, 4.9% / 0.9), hsl(217.2, 32.6%, 17.5% / 0.9));
+    
+    /* Ombres avec glow effect pour thème sombre */
+    --shadow-glow: 0 0 40px hsl(240, 100%, 70% / 0.3);
+    --shadow-card: 0 20px 60px hsl(0, 0%, 0% / 0.3);
+    --shadow-button: 0 10px 30px hsl(240, 100%, 70% / 0.4);
+
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
