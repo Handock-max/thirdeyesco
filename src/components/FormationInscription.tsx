@@ -90,7 +90,7 @@ const FormationInscription: React.FC = () => {
   };
 
   // Gérer les changements de données du formulaire
-  const handleInputChange = (field: keyof FormData, value: any) => {
+  const handleInputChange = (field: keyof FormData, value: string | number | boolean | string[]) => {
     setFormData(prev => {
       const newData = { ...prev, [field]: value };
       
