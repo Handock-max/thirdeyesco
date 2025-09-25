@@ -2,41 +2,64 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Design System Third Eyes Co. - Formation Tech Moderne
+All colors MUST be HSL. Design inspiré des meilleures plateformes EdTech */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Couleurs principales - Thème Tech Moderne */
+    --background: 220 26% 14%;
+    --foreground: 210 40% 98%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Glassmorphism cards */
+    --card: 220 26% 14% / 0.8;
+    --card-foreground: 210 40% 98%;
+    --card-border: 240 40% 90% / 0.2;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 220 26% 14%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 222.2 47.4% 11.2%;
+    /* Gradients Tech - Bleu vers Violet */
+    --primary: 240 100% 70%;
     --primary-foreground: 210 40% 98%;
+    --primary-glow: 260 100% 75%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 240 30% 25%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 240 20% 20%;
+    --muted-foreground: 240 20% 70%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 260 80% 65%;
+    --accent-foreground: 210 40% 98%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Bordures et inputs avec effet glassmorphism */
+    --border: 240 40% 90% / 0.2;
+    --input: 240 20% 20%;
+    --input-border: 240 40% 90% / 0.3;
+    --ring: 240 100% 70%;
 
-    --radius: 0.5rem;
+    --radius: 1rem;
+
+    /* Gradients personnalisés Third Eyes */
+    --gradient-primary: linear-gradient(135deg, hsl(240, 100%, 70%), hsl(260, 100%, 75%));
+    --gradient-background: linear-gradient(135deg, hsl(220, 26%, 14%), hsl(240, 30%, 18%));
+    --gradient-card: linear-gradient(145deg, hsl(240, 20%, 20% / 0.9), hsl(260, 20%, 22% / 0.9));
+    
+    /* Ombres avec glow effect */
+    --shadow-glow: 0 0 40px hsl(240, 100%, 70% / 0.3);
+    --shadow-card: 0 20px 60px hsl(0, 0%, 0% / 0.3);
+    --shadow-button: 0 10px 30px hsl(240, 100%, 70% / 0.4);
+    
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bouncy: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    
+    /* Backdrop blur pour glassmorphism */
+    --backdrop-blur: blur(20px);
 
     --sidebar-background: 0 0% 98%;
 
@@ -101,5 +124,134 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    background: var(--gradient-background);
+    min-height: 100vh;
+  }
+}
+
+/* Classes utilitaires Third Eyes Co */
+@layer components {
+  /* Logo backdrop flou */
+  .logo-backdrop {
+    @apply absolute inset-0 opacity-20;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: var(--backdrop-blur);
+    z-index: -1;
+  }
+
+  /* Glassmorphism card */
+  .glass-card {
+    background: var(--gradient-card);
+    border: 1px solid hsl(var(--card-border));
+    backdrop-filter: var(--backdrop-blur);
+    -webkit-backdrop-filter: var(--backdrop-blur);
+    box-shadow: var(--shadow-card);
+  }
+
+  /* Bouton principal avec glow */
+  .btn-primary-glow {
+    background: var(--gradient-primary);
+    box-shadow: var(--shadow-button);
+    transition: var(--transition-bouncy);
+  }
+
+  .btn-primary-glow:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 15px 40px hsl(240, 100%, 70% / 0.6);
+  }
+
+  /* Animation clignotante pour le CTA */
+  .pulse-glow {
+    animation: pulseGlow 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes pulseGlow {
+    0% {
+      box-shadow: 0 0 20px hsl(240, 100%, 70% / 0.4);
+    }
+    100% {
+      box-shadow: 0 0 40px hsl(240, 100%, 70% / 0.8), 0 0 60px hsl(260, 100%, 75% / 0.4);
+    }
+  }
+
+  /* Barre de progression moderne */
+  .progress-bar {
+    background: linear-gradient(90deg, 
+      hsl(240, 100%, 70%), 
+      hsl(260, 100%, 75%), 
+      hsl(240, 100%, 70%)
+    );
+    background-size: 200% 100%;
+    animation: progressFlow 3s ease-in-out infinite;
+  }
+
+  @keyframes progressFlow {
+    0%, 100% { background-position: 200% 0; }
+    50% { background-position: -200% 0; }
+  }
+
+  /* Fade animations pour transitions */
+  .fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+
+  .fade-out {
+    animation: fadeOut 0.4s ease-in forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-20px) scale(0.95);
+    }
+  }
+
+  /* Inputs avec effet focus moderne */
+  .modern-input {
+    @apply bg-input border border-border rounded-xl px-4 py-3 text-foreground;
+    @apply focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none;
+    transition: var(--transition-smooth);
+  }
+
+  .modern-input:focus {
+    box-shadow: 0 0 20px hsl(240, 100%, 70% / 0.2);
+  }
+
+  /* Styles pour les boutons radio et checkbox */
+  .custom-radio {
+    @apply relative p-4 glass-card rounded-xl cursor-pointer;
+    @apply hover:border-primary/50 transition-all duration-300;
+  }
+
+  .custom-radio input:checked + .radio-content {
+    @apply border-primary bg-primary/10;
+    box-shadow: 0 0 20px hsl(240, 100%, 70% / 0.3);
+  }
+
+  /* Message de succès */
+  .success-message {
+    background: linear-gradient(145deg, 
+      hsl(120, 60%, 20% / 0.9), 
+      hsl(140, 60%, 22% / 0.9)
+    );
+    border: 1px solid hsl(120, 60%, 50% / 0.3);
+    backdrop-filter: var(--backdrop-blur);
   }
 }
