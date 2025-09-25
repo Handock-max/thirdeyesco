@@ -12,6 +12,7 @@ import { ChevronRight, ChevronLeft, Eye, Users, Brain, BarChart, Sparkles } from
 import { useToast } from '@/hooks/use-toast';
 import { useSupabase } from '@/hooks/useSupabase';
 import ThemeToggle from '@/components/ThemeToggle';
+import { getWhatsAppUrl } from '@/config/site';
 import thirdEyesLogo from '@/assets/third-eyes-logo.png';
 
 // Types pour le formulaire - COMPLETER selon les besoins spécifiques
@@ -175,11 +176,10 @@ const FormationInscription: React.FC = () => {
     }
   };
 
-  // Fonction pour contacter WhatsApp - REMPLACER par votre numéro
+  // Fonction pour contacter WhatsApp
   const contactWhatsApp = () => {
-    const numeroWhatsApp = "+22896933995"; // REMPLACER par votre vrai numéro
     const message = `Bonjour, je viens de m'inscrire à la formation ${formData.formationSpecifique}. Mon nom est ${formData.nomComplet}.`;
-    const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(message)}`;
+    const url = getWhatsAppUrl(message);
     window.open(url, '_blank');
   };
 
