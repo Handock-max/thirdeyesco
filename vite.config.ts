@@ -18,13 +18,13 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  // Configuration pour GitHub Pages - Base path dynamique
-  base: mode === "production" ? (process.env.GITHUB_REPOSITORY ? `/${process.env.GITHUB_REPOSITORY.split('/')[1]}/` : "/thirdeyesco/") : "/",
+  // Configuration pour GitHub Pages - Base path simplifié
+  base: mode === "production" ? "/thirdeyesco/" : "/",
   // Optimisations de build
   build: {
     outDir: "dist",
     sourcemap: false,
-    minify: "esbuild", // Utilise esbuild au lieu de terser pour de meilleures performances
+    minify: "esbuild",
     rollupOptions: {
       output: {
         manualChunks: {
