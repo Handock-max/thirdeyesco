@@ -23,9 +23,14 @@ concurrency:
 
 # Jobs du workflow
 jobs:
-  # Job de build et test
-  build:
+  # Job de build et déploiement combinés
+  build-and-deploy:
     runs-on: ubuntu-latest
+    
+    # Configuration de l'environnement GitHub Pages
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     
     steps:
     # Étape 1: Récupération du code source
@@ -57,19 +62,7 @@ jobs:
       with:
         path: ./dist
 
-  # Job de déploiement
-  deploy:
-    # Ce job ne s'exécute que si le build réussit
-    needs: build
-    runs-on: ubuntu-latest
-    
-    # Configuration de l'environnement GitHub Pages
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    
-    steps:
-    # Étape 1: Déploiement sur GitHub Pages
+    # Étape 7: Déploiement sur GitHub Pages
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v4
