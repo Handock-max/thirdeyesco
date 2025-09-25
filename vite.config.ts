@@ -18,7 +18,7 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  // Configuration pour GitHub Pages
+  // Configuration pour GitHub Pages - CORRIGÉ
   base: mode === "production" ? "/thirdeyesco/" : "/",
   // Optimisations de build
   build: {
