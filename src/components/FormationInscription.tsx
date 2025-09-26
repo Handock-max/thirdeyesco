@@ -13,6 +13,9 @@ import { useToast } from '@/hooks/use-toast';
 import { useSupabase } from '@/hooks/useSupabase';
 import ThemeToggle from '@/components/ThemeToggle';
 import { getWhatsAppUrl } from '@/config/site';
+import { PaymentUtils } from '@/config/payment';
+import { notifierInscription } from '@/lib/slack';
+import PaymentOptions from '@/components/PaymentOptions';
 import thirdEyesLogo from '@/assets/third-eyes-logo.png';
 
 // Types pour le formulaire - COMPLETER selon les besoins spécifiques
@@ -63,7 +66,10 @@ const CENTRES_INTERET = [
 ];
 
 const FormationInscription: React.FC = () => {
+  // États pour la navigation dans le formulaire
   const [currentStep, setCurrentStep] = useState(0);
+  
+  // États pour les données du formulaire
   const [formData, setFormData] = useState<FormData>({
     nomComplet: '',
     email: '',
@@ -77,7 +83,12 @@ const FormationInscription: React.FC = () => {
     centresInteret: [],
     accepteConditions: false
   });
+  
+  // États pour le processus d'inscription et paiement
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [showPayment, setShowPayment] = useState(false); // NOUVEAU: pour afficher les options de paiement
+  const [paymentInitiated, setPaymentInitiated] = useState(false); // NOUVEAU: pour tracker si le paiement a été initié
+  
   const { toast } = useToast();
   
   // Hook Supabase pour la sauvegarde des données
@@ -136,7 +147,7 @@ const FormationInscription: React.FC = () => {
     }
   };
 
-  // Soumission du formulaire - CONNECTE A SUPABASE
+  // Soumission du formulaire - CONNECTE A SUPABASE ET SLACK
   const handleSubmit = async () => {
     try {
       // Préparation des données pour Supabase
@@ -154,23 +165,49 @@ const FormationInscription: React.FC = () => {
         accepte_conditions: formData.accepteConditions
       };
 
-      console.log('Tentative de sauvegarde:', inscriptionData);
+      console.log('📝 Tentative de sauvegarde:', inscriptionData);
 
       // Sauvegarde dans Supabase
       const result = await saveInscription(inscriptionData);
       
-      console.log('Résultat de la sauvegarde:', result);
+      console.log('💾 Résultat de la sauvegarde:', result);
       
       if (result.success) {
-        setIsSubmitted(true);
-        toast({
-          title: "Inscription réussie !",
-          description: `Merci ${formData.nomComplet}, nous vous recontacterons sous 24h.`
-        });
+        // ✅ SUCCÈS: Inscription sauvegardée
+        console.log('✅ Inscription sauvegardée avec succès');
+        
+        // Notification Slack de la nouvelle inscription
+        try {
+          await notifierInscription(inscriptionData);
+          console.log('📱 Notification Slack envoyée');
+        } catch (slackError) {
+          console.warn('⚠️ Erreur notification Slack:', slackError);
+          // On continue même si Slack échoue
+        }
+        
+        // Vérifier si on doit afficher les options de paiement (mobile uniquement)
+        const estMobile = PaymentUtils.estSurMobile();
+        
+        if (estMobile) {
+          // Sur mobile: afficher les options de paiement
+          setShowPayment(true);
+          toast({
+            title: "Inscription réussie !",
+            description: "Vous pouvez maintenant réserver votre place en payant.",
+          });
+        } else {
+          // Sur desktop: inscription terminée directement
+          setIsSubmitted(true);
+          toast({
+            title: "Inscription réussie !",
+            description: `Merci ${formData.nomComplet}, nous vous recontacterons sous 24h.`
+          });
+        }
+        
       } else {
-        // Afficher l'erreur spécifique
+        // ❌ ERREUR: Problème avec Supabase
         const errorMessage = result.error || 'Erreur inconnue lors de la sauvegarde';
-        console.error('Erreur Supabase:', errorMessage);
+        console.error('❌ Erreur Supabase:', errorMessage);
         
         // Sauvegarde de fallback dans localStorage
         try {
@@ -184,7 +221,7 @@ const FormationInscription: React.FC = () => {
           existingData.push(fallbackData);
           localStorage.setItem('inscriptions_fallback', JSON.stringify(existingData));
           
-          console.log('Données sauvegardées en local comme fallback');
+          console.log('💾 Données sauvegardées en local comme fallback');
           
           toast({
             title: "Inscription enregistrée localement",
@@ -202,7 +239,7 @@ const FormationInscription: React.FC = () => {
         }
       }
     } catch (error) {
-      console.error('Erreur lors de l\'inscription:', error);
+      console.error('❌ Erreur lors de l\'inscription:', error);
       
       // Message d'erreur plus détaillé
       const errorMessage = error instanceof Error ? error.message : 'Erreur inconnue';
@@ -215,6 +252,16 @@ const FormationInscription: React.FC = () => {
     }
   };
 
+  /**
+   * NOUVELLE FONCTION: Gestion après initiation du paiement
+   * Appelée quand l'utilisateur a initié un paiement
+   */
+  const handlePaymentInitiated = () => {
+    console.log('💳 Paiement initié par l\'utilisateur');
+    setPaymentInitiated(true);
+    setIsSubmitted(true); // Afficher le message final
+  };
+
   // Fonction pour contacter WhatsApp
   const contactWhatsApp = () => {
     const message = `Bonjour, je viens de m'inscrire à la formation ${formData.formationSpecifique}. Mon nom est ${formData.nomComplet}.`;
@@ -222,7 +269,54 @@ const FormationInscription: React.FC = () => {
     window.open(url, '_blank');
   };
 
-  // Rendu du message de succès
+  // Rendu des options de paiement (mobile uniquement)
+  if (showPayment) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+        {/* Logo en arrière-plan flouté */}
+        <div 
+          className="logo-backdrop"
+          style={{ backgroundImage: `url(${thirdEyesLogo})` }}
+        />
+        
+        {/* Bouton de basculement de thème en haut à droite */}
+        <div className="absolute top-4 right-4 z-10">
+          <ThemeToggle />
+        </div>
+        
+        <div className="w-full max-w-2xl">
+          {/* Composant des options de paiement */}
+          <PaymentOptions
+            inscriptionData={{
+              nom_complet: formData.nomComplet,
+              email: formData.email,
+              telephone: formData.telephone,
+              ville: formData.ville,
+              formation_specifique: formData.formationSpecifique,
+              prix: formData.prix,
+              type_formation: formData.typeFormation,
+              mode_formation: formData.modeFormation
+            }}
+            prixTotal={formData.prix}
+            onPaymentInitiated={handlePaymentInitiated}
+          />
+          
+          {/* Bouton pour passer le paiement */}
+          <div className="mt-6 text-center">
+            <Button
+              variant="outline"
+              onClick={() => setIsSubmitted(true)}
+              className="w-full"
+            >
+              Passer le paiement pour l'instant
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Rendu du message de succès final
   if (isSubmitted) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
@@ -246,13 +340,16 @@ const FormationInscription: React.FC = () => {
             </div>
             
             <h2 className="text-2xl font-bold mb-4 text-foreground">
-              Inscription réussie !
+              {paymentInitiated ? "Paiement initié !" : "Inscription réussie !"}
             </h2>
             
             <p className="text-muted-foreground mb-6">
               Merci <strong>{formData.nomComplet}</strong>, votre inscription à{' '}
               <strong>{formData.formationSpecifique}</strong> est bien enregistrée.
-              Vous recevrez un email de confirmation sous 24h.
+              {paymentInitiated 
+                ? " Nous traiterons votre paiement et vous recontacterons sous 24h."
+                : " Vous recevrez un email de confirmation sous 24h."
+              }
             </p>
             
             <div className="space-y-3">
