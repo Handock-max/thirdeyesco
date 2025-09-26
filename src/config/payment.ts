@@ -103,11 +103,26 @@ export const PaymentUtils = {
   // Déclencher l'appel USSD (sur mobile uniquement)
   declencherUSSD: (code: string): void => {
     if (PaymentUtils.estSurMobile()) {
-      // Sur mobile, on peut déclencher l'USSD via tel:
+      // Copier le code dans le presse-papier
+      PaymentUtils.copierCodeUSSD(code);
+      
+      // Ouvrir l'app téléphone avec le code
       window.location.href = `tel:${encodeURIComponent(code)}`;
     } else {
       console.log("Code USSD généré:", code);
       // Sur desktop, on affiche juste le code
+    }
+  },
+
+  // Copier le code USSD dans le presse-papier
+  copierCodeUSSD: async (code: string): Promise<boolean> => {
+    try {
+      await navigator.clipboard.writeText(code);
+      console.log('📋 Code USSD copié:', code);
+      return true;
+    } catch (error) {
+      console.warn('⚠️ Impossible de copier automatiquement:', error);
+      return false;
     }
   }
 };

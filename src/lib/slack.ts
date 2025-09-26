@@ -219,7 +219,7 @@ export const testerSlack = async (): Promise<boolean> => {
  * FONCTION DE TEST GLOBAL POUR DEBUG
  * Appelez cette fonction depuis la console du navigateur pour tester Slack
  */
-(window as any).testSlackDebug = async () => {
+(window as Window & { testSlackDebug?: () => Promise<boolean> }).testSlackDebug = async () => {
   console.log('🧪 TEST SLACK DEBUG');
   console.log('URL configurée:', import.meta.env.VITE_SLACK_WEBHOOK_URL);
   

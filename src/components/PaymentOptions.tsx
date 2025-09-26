@@ -116,7 +116,7 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
             console.log('📱 Résultat notification Slack paiement:', slackResult);
 
             if (estMobile) {
-                // Sur mobile: déclencher l'USSD
+                // Sur mobile: générer et afficher le code USSD
                 let codeUSSD: string;
 
                 if (operateur === 'flooz') {
@@ -129,14 +129,20 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
 
                 console.log(`📱 Code USSD généré: ${codeUSSD}`);
 
-                // Déclencher l'USSD (va ouvrir l'app téléphone)
-                PaymentUtils.declencherUSSD(codeUSSD);
-
-                // Message d'information
+                // Copier le code et ouvrir l'app téléphone
+                const copieCopie = await PaymentUtils.copierCodeUSSD(codeUSSD);
+                
+                // Afficher les instructions avant d'ouvrir l'app téléphone
                 toast({
-                    title: "Paiement en cours...",
-                    description: "Suivez les instructions sur votre téléphone pour finaliser le paiement.",
+                    title: `Code ${operateur.toUpperCase()} généré !`,
+                    description: `📋 Code: ${codeUSSD}\n\n📱 Instructions:\n1. Composez ce code sur votre téléphone\n2. Suivez les instructions\n3. Confirmez le paiement`,
+                    duration: 10000, // 10 secondes pour lire
                 });
+
+                // Attendre un peu puis ouvrir l'app téléphone
+                setTimeout(() => {
+                    PaymentUtils.declencherUSSD(codeUSSD);
+                }, 2000); // 2 secondes de délai
 
             } else {
                 // Sur desktop: afficher les informations de paiement
