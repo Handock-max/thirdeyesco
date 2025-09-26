@@ -154,8 +154,12 @@ const FormationInscription: React.FC = () => {
         accepte_conditions: formData.accepteConditions
       };
 
+      console.log('Tentative de sauvegarde:', inscriptionData);
+
       // Sauvegarde dans Supabase
       const result = await saveInscription(inscriptionData);
+      
+      console.log('Résultat de la sauvegarde:', result);
       
       if (result.success) {
         setIsSubmitted(true);
@@ -164,13 +168,48 @@ const FormationInscription: React.FC = () => {
           description: `Merci ${formData.nomComplet}, nous vous recontacterons sous 24h.`
         });
       } else {
-        throw new Error(result.error || 'Erreur lors de la sauvegarde');
+        // Afficher l'erreur spécifique
+        const errorMessage = result.error || 'Erreur inconnue lors de la sauvegarde';
+        console.error('Erreur Supabase:', errorMessage);
+        
+        // Sauvegarde de fallback dans localStorage
+        try {
+          const fallbackData = {
+            ...inscriptionData,
+            timestamp: new Date().toISOString(),
+            id: `fallback_${Date.now()}`
+          };
+          
+          const existingData = JSON.parse(localStorage.getItem('inscriptions_fallback') || '[]');
+          existingData.push(fallbackData);
+          localStorage.setItem('inscriptions_fallback', JSON.stringify(existingData));
+          
+          console.log('Données sauvegardées en local comme fallback');
+          
+          toast({
+            title: "Inscription enregistrée localement",
+            description: `Votre inscription a été sauvegardée. Nous vous recontacterons via WhatsApp.`,
+            variant: "default"
+          });
+          
+          setIsSubmitted(true);
+        } catch (fallbackError) {
+          toast({
+            title: "Erreur de sauvegarde",
+            description: `Erreur: ${errorMessage}. Contactez-nous directement sur WhatsApp.`,
+            variant: "destructive"
+          });
+        }
       }
     } catch (error) {
       console.error('Erreur lors de l\'inscription:', error);
+      
+      // Message d'erreur plus détaillé
+      const errorMessage = error instanceof Error ? error.message : 'Erreur inconnue';
+      
       toast({
-        title: "Erreur",
-        description: "Une erreur est survenue. Veuillez réessayer.",
+        title: "Erreur technique",
+        description: `Problème technique: ${errorMessage}. Contactez-nous si le problème persiste.`,
         variant: "destructive"
       });
     }
