@@ -22,8 +22,9 @@ export const PAYMENT_CONFIG = {
       `*145*1*${montant}*${numeroDestinataire}*2#`
   },
   
-  // Pourcentage des frais d'inscription (par rapport au prix total)
-  FRAIS_INSCRIPTION_POURCENTAGE: 30, // 30% du prix total
+  // Montant fixe des frais d'inscription (en FCFA)
+  // Peut être configuré via VITE_FRAIS_INSCRIPTION dans .env
+  FRAIS_INSCRIPTION_MONTANT: parseInt(import.meta.env.VITE_FRAIS_INSCRIPTION) || 5000, // 5 000 FCFA par défaut
   
   // Messages et textes (MODIFIEZ SELON VOS BESOINS)
   MESSAGES: {
@@ -158,9 +159,12 @@ export const SLACK_CONFIG = {
  * UTILITAIRES POUR LES PAIEMENTS
  */
 export const PaymentUtils = {
-  // Calculer les frais d'inscription
+  // Calculer les frais d'inscription (montant fixe)
   calculerFraisInscription: (prixTotal: number): number => {
-    return Math.round(prixTotal * (PAYMENT_CONFIG.FRAIS_INSCRIPTION_POURCENTAGE / 100));
+    // Les frais d'inscription sont fixes à 5 000 FCFA pour toutes les formations
+    // Peu importe si c'est une formation à 25 000 FCFA ou 100 000 FCFA
+    // Les frais restent toujours 5 000 FCFA
+    return PAYMENT_CONFIG.FRAIS_INSCRIPTION_MONTANT;
   },
   
   // Détecter si l'utilisateur est sur mobile

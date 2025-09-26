@@ -77,9 +77,9 @@ PAYMENT_CONFIG: {
 }
 ```
 
-### Modifier le Pourcentage des Frais
+### Modifier le Montant des Frais d'Inscription
 ```typescript
-FRAIS_INSCRIPTION_POURCENTAGE: 30, // 30% du prix total
+FRAIS_INSCRIPTION_MONTANT: 5000, // 5 000 FCFA pour toutes les formations
 ```
 
 ## 🔄 Flux Complet
