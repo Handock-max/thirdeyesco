@@ -30,13 +30,19 @@ export class SlackService {
     // Récupération de l'URL du webhook depuis les variables d'environnement
     this.webhookUrl = SLACK_CONFIG.WEBHOOK_URL;
     
-    console.log('🔧 Configuration Slack:', {
+    console.log('🔧 Configuration Slack DEBUG:', {
       webhookConfigured: !!this.webhookUrl,
-      webhookUrl: this.webhookUrl ? 'Configuré' : 'Non configuré'
+      webhookUrl: this.webhookUrl ? `Configuré (${this.webhookUrl.substring(0, 50)}...)` : 'Non configuré',
+      allEnvVars: {
+        VITE_SLACK_WEBHOOK_URL: import.meta.env.VITE_SLACK_WEBHOOK_URL ? 'Présent' : 'Absent',
+        NODE_ENV: import.meta.env.NODE_ENV,
+        MODE: import.meta.env.MODE
+      }
     });
     
-    if (!this.webhookUrl) {
-      console.warn('⚠️ URL Slack webhook non configurée. Les notifications ne seront pas envoyées.');
+    if (!this.webhookUrl || this.webhookUrl.trim() === '') {
+      console.error('❌ URL Slack webhook non configurée ou vide !');
+      console.log('🔍 Variables d\'environnement disponibles:', Object.keys(import.meta.env));
     }
   }
 
@@ -210,6 +216,39 @@ export const testerSlack = async (): Promise<boolean> => {
 };
 
 /**
+ * FONCTION DE TEST GLOBAL POUR DEBUG
+ * Appelez cette fonction depuis la console du navigateur pour tester Slack
+ */
+(window as any).testSlackDebug = async () => {
+  console.log('🧪 TEST SLACK DEBUG');
+  console.log('URL configurée:', import.meta.env.VITE_SLACK_WEBHOOK_URL);
+  
+  if (!import.meta.env.VITE_SLACK_WEBHOOK_URL) {
+    console.error('❌ Variable VITE_SLACK_WEBHOOK_URL non trouvée !');
+    return false;
+  }
+  
+  try {
+    const response = await fetch(import.meta.env.VITE_SLACK_WEBHOOK_URL, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        text: `🧪 TEST DIRECT - ${new Date().toLocaleString()}`
+      })
+    });
+    
+    const result = await response.text();
+    console.log('📨 Réponse Slack:', { status: response.status, body: result });
+    return response.ok;
+  } catch (error) {
+    console.error('❌ Erreur test Slack:', error);
+    return false;
+  }
+};
+
+/**
  * CONFIGURATION REQUISE POUR SLACK:
  * 
  * 1. Créez un webhook Slack:
@@ -218,8 +257,8 @@ export const testerSlack = async (): Promise<boolean> => {
  *    - Activez "Incoming Webhooks"
  *    - Créez un webhook pour votre canal #inscriptions
  * 
- * 2. Ajoutez l'URL dans votre fichier .env:
+ * 2. Ajoutez l'URL dans GitHub Variables (pas Secrets !):
  *    VITE_SLACK_WEBHOOK_URL=https://hooks.slack.com/services/YOUR/WEBHOOK/URL
  * 
- * 3. Testez la connexion en appelant testerSlack()
+ * 3. Testez avec: testSlackDebug() dans la console du navigateur
  */

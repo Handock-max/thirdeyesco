@@ -57,7 +57,7 @@ export const PAYMENT_CONFIG = {
  */
 export const SLACK_CONFIG = {
   // URL du webhook Slack (VOUS DEVEZ ME FOURNIR CETTE URL)
-  WEBHOOK_URL: process.env.VITE_SLACK_WEBHOOK_URL || "", // À configurer dans .env
+  WEBHOOK_URL: import.meta.env.VITE_SLACK_WEBHOOK_URL || "", // À configurer dans .env
   
   // Canal Slack où envoyer les notifications
   CHANNEL: "#inscriptions", // Modifiez selon votre canal
