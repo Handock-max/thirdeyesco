@@ -63,6 +63,7 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
     const [optionSelectionnee, setOptionSelectionnee] = useState<'total' | 'frais' | null>(null);
     const [paiementEnCours, setPaiementEnCours] = useState(false);
     const [paiementEffectue, setPaiementEffectue] = useState(false);
+    const [operateurUtilise, setOperateurUtilise] = useState<'flooz' | 'mixx' | null>(null);
 
     const { toast } = useToast();
 
@@ -161,8 +162,9 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
                 });
             }
 
-            // Marquer le paiement comme effectué
+            // Marquer le paiement comme effectué et stocker l'opérateur
             setPaiementEffectue(true);
+            setOperateurUtilise(operateur);
 
             // Notifier le composant parent
             onPaymentInitiated();
@@ -219,14 +221,34 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
                         </p>
                     </div>
 
-                    {/* Bouton pour revenir à l'accueil après paiement */}
-                    <Button
-                        variant="outline"
-                        onClick={() => window.location.reload()}
-                        className="w-full"
-                    >
-                        Revenir à l'Accueil
-                    </Button>
+                    {/* Boutons d'action après paiement */}
+                    <div className="space-y-3">
+                        <Button
+                            onClick={() => {
+                                const montantPaye = optionSelectionnee === 'total' ? prixTotal : fraisInscription;
+                                const whatsappUrl = PaymentUtils.genererWhatsAppPreuvePaiement(
+                                    inscriptionData.nom_complet,
+                                    inscriptionData.formation_specifique,
+                                    montantPaye,
+                                    operateurUtilise || 'Mobile Money'
+                                );
+                                window.open(whatsappUrl, '_blank');
+                            }}
+                            className="btn-primary-glow w-full"
+                            size="lg"
+                        >
+                            <Phone className="w-5 h-5 mr-2" />
+                            Envoyer la preuve de paiement
+                        </Button>
+                        
+                        <Button
+                            variant="outline"
+                            onClick={() => window.location.reload()}
+                            className="w-full"
+                        >
+                            Revenir à l'Accueil
+                        </Button>
+                    </div>
                 </CardContent>
             </Card>
         );

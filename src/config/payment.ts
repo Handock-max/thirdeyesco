@@ -124,6 +124,31 @@ export const PaymentUtils = {
     }
   },
 
+  // Générer l'URL WhatsApp pour envoyer la preuve de paiement
+  genererWhatsAppPreuvePaiement: (
+    nomComplet: string, 
+    formation: string, 
+    montant: number, 
+    operateur: string
+  ): string => {
+    const numeroWhatsApp = import.meta.env.VITE_WHATSAPP_NUMBER || "+22896933995";
+    
+    const message = `Bonjour Third Eyes Co. 👋
+
+🎓 *PREUVE DE PAIEMENT*
+
+👤 Nom: ${nomComplet}
+📚 Formation: ${formation}
+💰 Montant payé: ${montant.toLocaleString()} FCFA
+📱 Opérateur: ${operateur.toUpperCase()}
+
+✅ J'ai effectué le paiement, je vous envoie la preuve de paiement ci-joint.
+
+Merci de confirmer la réception.`;
+
+    return `https://wa.me/${numeroWhatsApp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message)}`;
+  },
+
   // Copier le code USSD dans le presse-papier
   copierCodeUSSD: async (code: string): Promise<boolean> => {
     try {

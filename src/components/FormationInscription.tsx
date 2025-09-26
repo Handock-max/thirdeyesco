@@ -43,14 +43,14 @@ interface FormData {
 // Configuration des formations - MODIFIER selon vos tarifs exacts
 const FORMATIONS_CONFIG = {
   individuelle: [
-    { id: 'data-debutant', nom: 'Data Débutant (2 jours)', prix: 25000 },
-    { id: 'data-intermediaire', nom: 'Data Intermédiaire (2 jours)', prix: 35000 },
+    { id: 'data-debutant', nom: 'Data Analyse Débutant (2 jours)', prix: 25000 },
+    { id: 'data-intermediaire', nom: 'Data Analyse Intermédiaire (2 jours)', prix: 35000 },
     { id: 'ia-debutant', nom: 'IA Débutant (2 jours)', prix: 25000 },
     { id: 'ia-intermediaire', nom: 'IA Intermédiaire (2 jours)', prix: 35000 }
   ],
   pack: [
-    { id: 'pack-debutant', nom: 'Pack Débutant (Data + IA, 4 jours)', prix: 55000 },
-    { id: 'pack-intermediaire', nom: 'Pack Intermédiaire (Data + IA, 4 jours)', prix: 55000 }
+    { id: 'pack-debutant', nom: 'Pack Débutant (Data Analyse + IA, 4 jours)', prix: 55000 },
+    { id: 'pack-intermediaire', nom: 'Pack Intermédiaire (Data Analyse + IA, 4 jours)', prix: 55000 }
   ],
   cycle: [
     { id: 'cycle-complet', nom: 'Cycle complet (8 jours)', prix: 100000 }
@@ -58,7 +58,7 @@ const FORMATIONS_CONFIG = {
 };
 
 const CENTRES_INTERET = [
-  'Data Analysis',
+  'Analyse de données',
   'Data Visualization',
   'Business Intelligence',
   'Intelligence Artificielle',
@@ -363,14 +363,43 @@ const FormationInscription: React.FC = () => {
             </p>
 
             <div className="space-y-3">
-              <Button
-                onClick={contactWhatsApp}
-                className="btn-primary-glow w-full"
-                size="lg"
-              >
-                <Users className="w-5 h-5 mr-2" />
-                Nous contacter sur WhatsApp
-              </Button>
+              {paymentInitiated ? (
+                // Si paiement initié, bouton pour envoyer la preuve
+                <Button
+                  onClick={() => {
+                    const message = `Bonjour Third Eyes Co. 👋
+
+🎓 *PREUVE DE PAIEMENT*
+
+👤 Nom: ${formData.nomComplet}
+📚 Formation: ${formData.formationSpecifique}
+💰 Montant payé: ${formData.prix.toLocaleString()} FCFA
+
+✅ J'ai effectué le paiement, je vous envoie la preuve de paiement ci-joint.
+
+Merci de confirmer la réception.`;
+                    
+                    const numeroWhatsApp = "+22896933995"; // Ou depuis les variables d'env
+                    const whatsappUrl = `https://wa.me/${numeroWhatsApp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message)}`;
+                    window.open(whatsappUrl, '_blank');
+                  }}
+                  className="btn-primary-glow w-full"
+                  size="lg"
+                >
+                  <Users className="w-5 h-5 mr-2" />
+                  Envoyer la preuve de paiement
+                </Button>
+              ) : (
+                // Sinon, bouton contact normal
+                <Button
+                  onClick={contactWhatsApp}
+                  className="btn-primary-glow w-full"
+                  size="lg"
+                >
+                  <Users className="w-5 h-5 mr-2" />
+                  Nous contacter sur WhatsApp
+                </Button>
+              )}
 
               <Button
                 variant="outline"
