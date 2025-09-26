@@ -73,12 +73,9 @@ export class SlackService {
         payload: payload
       });
 
-      // SOLUTION CORS: Utiliser un proxy public pour contourner CORS
-      // Alternative 1: allorigins.win (gratuit)
-      const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(this.webhookUrl)}`;
-      
-      // Alternative 2: Si allorigins ne marche pas, essayer cors-anywhere
-      // const proxyUrl = `https://cors-anywhere.herokuapp.com/${this.webhookUrl}`;
+      // SOLUTION CORS: Utiliser un proxy qui gère les POST correctement
+      // Utilisation de corsproxy.io qui transmet correctement les POST
+      const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(this.webhookUrl)}`;
 
       const response = await fetch(proxyUrl, {
         method: 'POST',
@@ -125,8 +122,8 @@ export class SlackService {
   private async envoyerMessageFallback(message: string): Promise<boolean> {
     const payload = { text: message };
     
-    // Proxy alternatif
-    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(this.webhookUrl)}`;
+    // Proxy alternatif: proxy-cors.isomorphic-git.org
+    const proxyUrl = `https://proxy-cors.isomorphic-git.org/${this.webhookUrl}`;
     
     const response = await fetch(proxyUrl, {
       method: 'POST',
@@ -134,6 +131,12 @@ export class SlackService {
         'Content-type': 'application/json',
       },
       body: JSON.stringify(payload)
+    });
+
+    console.log('📨 Réponse proxy alternatif:', {
+      status: response.status,
+      statusText: response.statusText,
+      body: await response.text()
     });
 
     return response.ok;
