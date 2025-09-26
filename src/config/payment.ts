@@ -6,9 +6,9 @@
  * Modifiez ces valeurs selon vos besoins
  */
 export const PAYMENT_CONFIG = {
-  // Numéros de réception des paiements (MODIFIEZ CES VALEURS)
-  FLOOZ_NUMBER: "96933995", // Votre numéro Flooz
-  MIXX_NUMBER: "91383066",  // Votre numéro Mixx
+  // Numéros de réception des paiements (récupérés depuis les variables d'environnement)
+  FLOOZ_NUMBER: import.meta.env.VITE_FLOOZ_NUMBER || "", // Fallback si variable non définie
+  MIXX_NUMBER: import.meta.env.VITE_MIXX_NUMBER || "",   // Fallback si variable non définie
   
   // Codes USSD pour déclencher les paiements
   // Format: *code*options*montant*numero*confirmation#
@@ -60,10 +60,10 @@ export const SLACK_CONFIG = {
   WEBHOOK_URL: import.meta.env.VITE_SLACK_WEBHOOK_URL || "", // À configurer dans .env
   
   // Canal Slack où envoyer les notifications
-  CHANNEL: "#inscriptions", // Modifiez selon votre canal
+  CHANNEL: "#thirds-eyes-co", // Modifiez selon votre canal
   
   // Nom du bot qui envoie les messages
-  BOT_NAME: "Third Eyes Bot",
+  BOT_NAME: "Inscription",
   
   // Emoji pour le bot
   BOT_EMOJI: ":brain:",
@@ -81,6 +81,16 @@ export const PaymentUtils = {
     // Peu importe si c'est une formation à 25 000 FCFA ou 100 000 FCFA
     // Les frais restent toujours 5 000 FCFA
     return PAYMENT_CONFIG.FRAIS_INSCRIPTION_MONTANT;
+  },
+
+  // Debug: Afficher la configuration des numéros
+  debugNumerosConfig: (): void => {
+    console.log('🔧 Configuration numéros de paiement:', {
+      floozFromEnv: import.meta.env.VITE_FLOOZ_NUMBER,
+      mixxFromEnv: import.meta.env.VITE_MIXX_NUMBER,
+      floozUsed: PAYMENT_CONFIG.FLOOZ_NUMBER,
+      mixxUsed: PAYMENT_CONFIG.MIXX_NUMBER
+    });
   },
   
   // Détecter si l'utilisateur est sur mobile
@@ -159,13 +169,13 @@ export interface OperateurPaiement {
 export const OPERATEURS: OperateurPaiement[] = [
   {
     nom: 'flooz',
-    numero: PAYMENT_CONFIG.FLOOZ_NUMBER,
+    numero: PAYMENT_CONFIG.FLOOZ_NUMBER, // Récupéré depuis VITE_FLOOZ_NUMBER
     logo: '/src/assets/images/flooz.png', // Chemin vers votre logo Flooz
     couleur: '#FF6B35' // Couleur orange de Flooz
   },
   {
     nom: 'mixx',
-    numero: PAYMENT_CONFIG.MIXX_NUMBER,
+    numero: PAYMENT_CONFIG.MIXX_NUMBER, // Récupéré VITE_MIXX_NUMBER
     logo: '/src/assets/images/mixx.png', // Chemin vers votre logo Mixx
     couleur: '#1E40AF' // Couleur bleue de Mixx
   }

@@ -69,6 +69,11 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
     // Détection si l'utilisateur est sur mobile
     const estMobile = PaymentUtils.estSurMobile();
 
+    // Debug: Afficher la configuration des numéros (une seule fois)
+    React.useEffect(() => {
+        PaymentUtils.debugNumerosConfig();
+    }, []);
+
     // Calcul des montants
     const fraisInscription = PaymentUtils.calculerFraisInscription(prixTotal);
 
@@ -142,7 +147,7 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
                 // Attendre un peu puis ouvrir l'app téléphone
                 setTimeout(() => {
                     PaymentUtils.declencherUSSD(codeUSSD);
-                }, 2000); // 2 secondes de délai
+                }, 3000); // 3 secondes de délai
 
             } else {
                 // Sur desktop: afficher les informations de paiement
@@ -208,11 +213,20 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
                         {PAYMENT_CONFIG.MESSAGES.APRES_PAIEMENT.DESCRIPTION}
                     </p>
 
-                    <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                    <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg mb-6">
                         <p className="text-sm font-medium">
                             {PAYMENT_CONFIG.MESSAGES.APRES_PAIEMENT.CONTACT}
                         </p>
                     </div>
+
+                    {/* Bouton pour revenir à l'accueil après paiement */}
+                    <Button
+                        variant="outline"
+                        onClick={() => window.location.reload()}
+                        className="w-full"
+                    >
+                        Revenir à l'Accueil
+                    </Button>
                 </CardContent>
             </Card>
         );

@@ -25,17 +25,17 @@ interface FormData {
   email: string;
   telephone: string;
   ville: string;
-  
+
   // Page 2 : Sélection formation
   typeFormation: 'individuelle' | 'pack' | 'cycle' | '';
   formationSpecifique: string;
   prix: number;
-  
+
   // Page 3 : Modalités
   modeFormation: 'presentiel' | 'enligne' | 'mixte' | '';
   motivation: string;
   centresInteret: string[];
-  
+
   // Page 4 : Consentement
   accepteConditions: boolean;
 }
@@ -59,7 +59,7 @@ const FORMATIONS_CONFIG = {
 
 const CENTRES_INTERET = [
   'Data Analysis',
-  'Data Visualization', 
+  'Data Visualization',
   'Business Intelligence',
   'Intelligence Artificielle',
   'Storytelling & Communication avec les données'
@@ -68,7 +68,7 @@ const CENTRES_INTERET = [
 const FormationInscription: React.FC = () => {
   // États pour la navigation dans le formulaire
   const [currentStep, setCurrentStep] = useState(0);
-  
+
   // États pour les données du formulaire
   const [formData, setFormData] = useState<FormData>({
     nomComplet: '',
@@ -83,14 +83,14 @@ const FormationInscription: React.FC = () => {
     centresInteret: [],
     accepteConditions: false
   });
-  
+
   // États pour le processus d'inscription et paiement
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showPayment, setShowPayment] = useState(false); // NOUVEAU: pour afficher les options de paiement
   const [paymentInitiated, setPaymentInitiated] = useState(false); // NOUVEAU: pour tracker si le paiement a été initié
-  
+
   const { toast } = useToast();
-  
+
   // Hook Supabase pour la sauvegarde des données
   const { saveInscription, isLoading: isSupabaseLoading, error: supabaseError } = useSupabase();
 
@@ -105,7 +105,7 @@ const FormationInscription: React.FC = () => {
   const handleInputChange = (field: keyof FormData, value: string | number | boolean | string[]) => {
     setFormData(prev => {
       const newData = { ...prev, [field]: value };
-      
+
       // Recalculer le prix si le type ou la formation change
       if (field === 'typeFormation' || field === 'formationSpecifique') {
         newData.prix = calculerPrix(
@@ -113,7 +113,7 @@ const FormationInscription: React.FC = () => {
           field === 'formationSpecifique' ? value : newData.formationSpecifique
         );
       }
-      
+
       return newData;
     });
   };
@@ -169,13 +169,13 @@ const FormationInscription: React.FC = () => {
 
       // Sauvegarde dans Supabase
       const result = await saveInscription(inscriptionData);
-      
+
       console.log('💾 Résultat de la sauvegarde:', result);
-      
+
       if (result.success) {
         // ✅ SUCCÈS: Inscription sauvegardée
         console.log('✅ Inscription sauvegardée avec succès');
-        
+
         // Notification Slack de la nouvelle inscription
         try {
           console.log('📤 Tentative notification Slack inscription...');
@@ -185,10 +185,10 @@ const FormationInscription: React.FC = () => {
           console.warn('⚠️ Erreur notification Slack:', slackError);
           // On continue même si Slack échoue
         }
-        
+
         // Vérifier si on doit afficher les options de paiement (mobile uniquement)
         const estMobile = PaymentUtils.estSurMobile();
-        
+
         if (estMobile) {
           // Sur mobile: afficher les options de paiement
           setShowPayment(true);
@@ -204,12 +204,12 @@ const FormationInscription: React.FC = () => {
             description: `Merci ${formData.nomComplet}, nous vous recontacterons sous 24h.`
           });
         }
-        
+
       } else {
         // ❌ ERREUR: Problème avec Supabase
         const errorMessage = result.error || 'Erreur inconnue lors de la sauvegarde';
         console.error('❌ Erreur Supabase:', errorMessage);
-        
+
         // Sauvegarde de fallback dans localStorage
         try {
           const fallbackData = {
@@ -217,19 +217,19 @@ const FormationInscription: React.FC = () => {
             timestamp: new Date().toISOString(),
             id: `fallback_${Date.now()}`
           };
-          
+
           const existingData = JSON.parse(localStorage.getItem('inscriptions_fallback') || '[]');
           existingData.push(fallbackData);
           localStorage.setItem('inscriptions_fallback', JSON.stringify(existingData));
-          
+
           console.log('💾 Données sauvegardées en local comme fallback');
-          
+
           toast({
             title: "Inscription enregistrée localement",
             description: `Votre inscription a été sauvegardée. Nous vous recontacterons via WhatsApp.`,
             variant: "default"
           });
-          
+
           setIsSubmitted(true);
         } catch (fallbackError) {
           toast({
@@ -241,10 +241,10 @@ const FormationInscription: React.FC = () => {
       }
     } catch (error) {
       console.error('❌ Erreur lors de l\'inscription:', error);
-      
+
       // Message d'erreur plus détaillé
       const errorMessage = error instanceof Error ? error.message : 'Erreur inconnue';
-      
+
       toast({
         title: "Erreur technique",
         description: `Problème technique: ${errorMessage}. Contactez-nous si le problème persiste.`,
@@ -263,6 +263,15 @@ const FormationInscription: React.FC = () => {
     setIsSubmitted(true); // Afficher le message final
   };
 
+  /**
+   * FONCTION: Retour à l'accueil
+   * Remet à zéro le formulaire et retourne à la page d'accueil
+   */
+  const retourAccueil = () => {
+    // Recharger la page pour revenir à l'état initial
+    window.location.reload();
+  };
+
   // Fonction pour contacter WhatsApp
   const contactWhatsApp = () => {
     const message = `Bonjour, je viens de m'inscrire à la formation ${formData.formationSpecifique}. Mon nom est ${formData.nomComplet}.`;
@@ -275,16 +284,16 @@ const FormationInscription: React.FC = () => {
     return (
       <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
         {/* Logo en arrière-plan flouté */}
-        <div 
+        <div
           className="logo-backdrop"
           style={{ backgroundImage: `url(${thirdEyesLogo})` }}
         />
-        
+
         {/* Bouton de basculement de thème en haut à droite */}
         <div className="absolute top-4 right-4 z-10">
           <ThemeToggle />
         </div>
-        
+
         <div className="w-full max-w-2xl">
           {/* Composant des options de paiement */}
           <PaymentOptions
@@ -301,12 +310,12 @@ const FormationInscription: React.FC = () => {
             prixTotal={formData.prix}
             onPaymentInitiated={handlePaymentInitiated}
           />
-          
-          {/* Bouton pour passer le paiement */}
+
+          {/* Bouton pour passer le paiement et retourner à l'accueil */}
           <div className="mt-6 text-center">
             <Button
               variant="outline"
-              onClick={() => setIsSubmitted(true)}
+              onClick={retourAccueil}
               className="w-full"
             >
               Passer le paiement pour l'instant
@@ -322,16 +331,16 @@ const FormationInscription: React.FC = () => {
     return (
       <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
         {/* Logo en arrière-plan flouté */}
-        <div 
+        <div
           className="logo-backdrop"
           style={{ backgroundImage: `url(${thirdEyesLogo})` }}
         />
-        
+
         {/* Bouton de basculement de thème en haut à droite */}
         <div className="absolute top-4 right-4 z-10">
           <ThemeToggle />
         </div>
-        
+
         <Card className="glass-card w-full max-w-lg success-message fade-in">
           <CardContent className="p-8 text-center">
             <div className="mb-6 flex justify-center">
@@ -339,20 +348,20 @@ const FormationInscription: React.FC = () => {
                 <Sparkles className="w-10 h-10 text-white" />
               </div>
             </div>
-            
+
             <h2 className="text-2xl font-bold mb-4 text-foreground">
               {paymentInitiated ? "Paiement initié !" : "Inscription réussie !"}
             </h2>
-            
+
             <p className="text-muted-foreground mb-6">
               Merci <strong>{formData.nomComplet}</strong>, votre inscription à{' '}
               <strong>{formData.formationSpecifique}</strong> est bien enregistrée.
-              {paymentInitiated 
+              {paymentInitiated
                 ? " Nous traiterons votre paiement et vous recontacterons sous 24h."
                 : " Vous recevrez un email de confirmation sous 24h."
               }
             </p>
-            
+
             <div className="space-y-3">
               <Button
                 onClick={contactWhatsApp}
@@ -362,13 +371,13 @@ const FormationInscription: React.FC = () => {
                 <Users className="w-5 h-5 mr-2" />
                 Nous contacter sur WhatsApp
               </Button>
-              
+
               <Button
                 variant="outline"
-                onClick={() => window.location.reload()}
+                onClick={retourAccueil}
                 className="w-full"
               >
-                Nouvelle inscription
+                {paymentInitiated ? "Revenir à l'Accueil" : "Nouvelle inscription"}
               </Button>
             </div>
           </CardContent>
@@ -390,7 +399,7 @@ const FormationInscription: React.FC = () => {
                 Commençons par créer votre profil Third Eyes Co.
               </p>
             </div>
-            
+
             <div className="space-y-4">
               <div>
                 <Label htmlFor="nomComplet">Nom complet *</Label>
@@ -402,7 +411,7 @@ const FormationInscription: React.FC = () => {
                   placeholder="Votre nom et prénom"
                 />
               </div>
-              
+
               <div>
                 <Label htmlFor="email">Adresse e-mail *</Label>
                 <Input
@@ -414,7 +423,7 @@ const FormationInscription: React.FC = () => {
                   placeholder="votre@email.com"
                 />
               </div>
-              
+
               <div>
                 <Label htmlFor="telephone">Téléphone / WhatsApp *</Label>
                 <Input
@@ -425,7 +434,7 @@ const FormationInscription: React.FC = () => {
                   placeholder="+225 XX XX XX XX"
                 />
               </div>
-              
+
               <div>
                 <Label htmlFor="ville">Ville / Localité *</Label>
                 <Input
@@ -450,7 +459,7 @@ const FormationInscription: React.FC = () => {
                 Choisissez la formation qui vous correspond
               </p>
             </div>
-            
+
             {/* Sélection du type de formation */}
             <div>
               <Label className="text-base font-semibold mb-4 block">
@@ -470,7 +479,7 @@ const FormationInscription: React.FC = () => {
                     </div>
                   </Label>
                 </div>
-                
+
                 <div className="custom-radio">
                   <RadioGroupItem value="pack" id="pack" />
                   <Label htmlFor="pack" className="radio-content block ml-6 cursor-pointer">
@@ -480,7 +489,7 @@ const FormationInscription: React.FC = () => {
                     </div>
                   </Label>
                 </div>
-                
+
                 <div className="custom-radio">
                   <RadioGroupItem value="cycle" id="cycle" />
                   <Label htmlFor="cycle" className="radio-content block ml-6 cursor-pointer">
@@ -492,7 +501,7 @@ const FormationInscription: React.FC = () => {
                 </div>
               </RadioGroup>
             </div>
-            
+
             {/* Sélection de la formation spécifique */}
             {formData.typeFormation && (
               <div className="fade-in">
@@ -521,7 +530,7 @@ const FormationInscription: React.FC = () => {
                 </Select>
               </div>
             )}
-            
+
             {/* Affichage du prix */}
             {formData.prix > 0 && (
               <div className="glass-card p-4 text-center fade-in">
@@ -544,7 +553,7 @@ const FormationInscription: React.FC = () => {
                 Comment souhaitez-vous suivre la formation ?
               </p>
             </div>
-            
+
             {/* Mode de formation */}
             <div>
               <Label className="text-base font-semibold mb-4 block">
@@ -567,7 +576,7 @@ const FormationInscription: React.FC = () => {
                     </div>
                   </Label>
                 </div>
-                
+
                 <div className="custom-radio">
                   <RadioGroupItem value="enligne" id="enligne" />
                   <Label htmlFor="enligne" className="radio-content block ml-6 cursor-pointer">
@@ -580,7 +589,7 @@ const FormationInscription: React.FC = () => {
                     </div>
                   </Label>
                 </div>
-                
+
                 <div className="custom-radio">
                   <RadioGroupItem value="mixte" id="mixte" />
                   <Label htmlFor="mixte" className="radio-content block ml-6 cursor-pointer">
@@ -592,7 +601,7 @@ const FormationInscription: React.FC = () => {
                 </div>
               </RadioGroup>
             </div>
-            
+
             {/* Motivation */}
             <div>
               <Label htmlFor="motivation" className="text-base font-semibold">
@@ -609,7 +618,7 @@ const FormationInscription: React.FC = () => {
                 placeholder="Partagez vos motivations et objectifs avec cette formation..."
               />
             </div>
-            
+
             {/* Centres d'intérêt */}
             <div>
               <Label className="text-base font-semibold mb-4 block">
@@ -649,14 +658,14 @@ const FormationInscription: React.FC = () => {
                 Vérifiez vos informations avant finalisation
               </p>
             </div>
-            
+
             {/* Récapitulatif */}
             <div className="glass-card p-6 space-y-4">
               <h3 className="font-semibold text-lg mb-4 flex items-center">
                 <BarChart className="w-5 h-5 mr-2" />
                 Récapitulatif de votre inscription
               </h3>
-              
+
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span>Nom :</span>
@@ -683,7 +692,7 @@ const FormationInscription: React.FC = () => {
                 </div>
               </div>
             </div>
-            
+
             {/* Conditions générales */}
             <div className="space-y-4">
               <div className="flex items-start space-x-3">
@@ -693,7 +702,7 @@ const FormationInscription: React.FC = () => {
                   onCheckedChange={(checked) => handleInputChange('accepteConditions', checked)}
                 />
                 <Label htmlFor="conditions" className="text-sm cursor-pointer">
-                  J'accepte les conditions générales et confirme que mes informations sont correctes. 
+                  J'accepte les conditions générales et confirme que mes informations sont correctes.
                   Je consens à être recontacté par Third Eyes Co. pour le suivi de ma formation.
                 </Label>
               </div>
@@ -709,16 +718,16 @@ const FormationInscription: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
       {/* Logo en arrière-plan flouté */}
-      <div 
+      <div
         className="logo-backdrop"
         style={{ backgroundImage: `url(${thirdEyesLogo})` }}
       />
-      
+
       {/* Bouton de basculement de thème en haut à droite */}
       <div className="absolute top-4 right-4 z-10">
         <ThemeToggle />
       </div>
-      
+
       <Card className="glass-card w-full max-w-2xl fade-in">
         <CardHeader className="text-center pb-2">
           <div className="flex justify-center mb-4">
@@ -729,23 +738,23 @@ const FormationInscription: React.FC = () => {
           <CardTitle className="text-2xl">
             Inscription Formation Third Eyes Co.
           </CardTitle>
-          
+
           {/* Barre de progression */}
           <div className="mt-6">
             <div className="flex justify-between text-xs text-muted-foreground mb-2">
               <span>Étape {currentStep + 1} sur 4</span>
               <span>{Math.round(((currentStep + 1) / 4) * 100)}%</span>
             </div>
-            <Progress 
-              value={((currentStep + 1) / 4) * 100} 
+            <Progress
+              value={((currentStep + 1) / 4) * 100}
               className="h-2"
             />
           </div>
         </CardHeader>
-        
+
         <CardContent className="space-y-6">
           {renderStep()}
-          
+
           {/* Navigation */}
           <div className="flex justify-between pt-6 border-t border-card-border">
             <Button
@@ -757,7 +766,7 @@ const FormationInscription: React.FC = () => {
               <ChevronLeft className="w-4 h-4 mr-1" />
               Précédent
             </Button>
-            
+
             {currentStep < 3 ? (
               <Button
                 onClick={nextStep}
