@@ -4,9 +4,26 @@
 import { SLACK_CONFIG } from '@/config/payment';
 
 /**
- * INTERFACE POUR LES DONNÉES D'INSCRIPTION
- * Définit la structure des données qu'on envoie à Slack
+ * INTERFACES POUR LES DONNÉES SLACK
  */
+
+// Structure d'un message Slack
+interface SlackMessage {
+  text: string;
+  blocks?: Array<{
+    type: string;
+    text?: {
+      type: string;
+      text: string;
+    };
+    fields?: Array<{
+      type: string;
+      text: string;
+    }>;
+  }>;
+}
+
+// Interface pour les données d'inscription (utilisée dans Slack)
 interface InscriptionData {
   nom_complet: string;
   email: string;
@@ -38,7 +55,7 @@ export class SlackService {
    * MÉTHODE PRIVÉE: Envoyer un message à Slack
    * @param payload - Le contenu du message à envoyer
    */
-  private async envoyerMessage(payload: any): Promise<boolean> {
+  private async envoyerMessage(payload: SlackMessage): Promise<boolean> {
     // Si pas d'URL configurée, on simule l'envoi
     if (!this.webhookUrl) {
       console.log('📱 Simulation envoi Slack:', payload);

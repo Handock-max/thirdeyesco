@@ -69,7 +69,7 @@ export const SLACK_CONFIG = {
   
   // Templates de messages
   TEMPLATES: {
-    NOUVELLE_INSCRIPTION: (data: any) => ({
+    NOUVELLE_INSCRIPTION: (data: InscriptionData) => ({
       text: `🎓 Nouvelle inscription - ${data.nom_complet}`,
       blocks: [
         {
@@ -111,7 +111,7 @@ export const SLACK_CONFIG = {
       ]
     }),
     
-    TENTATIVE_PAIEMENT: (data: any, typePaiement: string, montant: number) => ({
+    TENTATIVE_PAIEMENT: (data: InscriptionData, typePaiement: string, montant: number) => ({
       text: `💳 Tentative de paiement - ${data.nom_complet}`,
       blocks: [
         {
@@ -193,6 +193,19 @@ export const PaymentUtils = {
 /**
  * TYPES TYPESCRIPT POUR LA GESTION DES PAIEMENTS
  */
+
+// Interface pour les données d'inscription (utilisée dans les templates Slack)
+export interface InscriptionData {
+  nom_complet: string;
+  email: string;
+  telephone: string;
+  ville: string;
+  formation_specifique: string;
+  prix: number;
+  type_formation: string;
+  mode_formation: string;
+}
+
 export interface OptionPaiement {
   type: 'total' | 'frais';
   montant: number;
