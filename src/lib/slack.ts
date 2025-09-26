@@ -158,7 +158,7 @@ export class SlackService {
    * Envoie une notification quand quelqu'un s'inscrit
    * @param data - Les données de l'inscription
    */
-  async notifierNouvelleInscription(data: InscriptionData): Promise < boolean > {
+  async notifierNouvelleInscription(data: InscriptionData): Promise<boolean> {
   console.log('📤 Envoi notification nouvelle inscription pour:', data.nom_complet);
 
   // Message simple et clair pour Slack
@@ -190,7 +190,7 @@ export class SlackService {
   typePaiement: 'total' | 'frais',
   montant: number,
   operateur: 'flooz' | 'mixx'
-): Promise < boolean > {
+): Promise<boolean> {
   console.log('📤 Envoi notification tentative paiement pour:', data.nom_complet);
 
   // Formatage du type de paiement pour l'affichage
@@ -219,7 +219,7 @@ export class SlackService {
    * TESTER LA CONNEXION SLACK
    * Envoie un message de test pour vérifier que tout fonctionne
    */
-  async testerConnexion(): Promise < boolean > {
+  async testerConnexion(): Promise<boolean> {
   console.log('🧪 Test de connexion Slack...');
 
   const messageTest = `🧪 TEST DE CONNEXION - Third Eyes Bot
