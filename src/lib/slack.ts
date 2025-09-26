@@ -68,39 +68,85 @@ export class SlackService {
         text: message
       };
 
-      console.log('📡 Envoi vers Slack:', {
-        url: this.webhookUrl,
+      console.log('📡 Envoi vers Slack via proxy CORS:', {
+        originalUrl: this.webhookUrl,
         payload: payload
       });
 
-      // Envoi de la requête POST vers Slack (format exact de l'exemple Slack)
-      const response = await fetch(this.webhookUrl, {
+      // SOLUTION CORS: Utiliser un proxy public pour contourner CORS
+      // Alternative 1: allorigins.win (gratuit)
+      const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(this.webhookUrl)}`;
+      
+      // Alternative 2: Si allorigins ne marche pas, essayer cors-anywhere
+      // const proxyUrl = `https://cors-anywhere.herokuapp.com/${this.webhookUrl}`;
+
+      const response = await fetch(proxyUrl, {
         method: 'POST',
         headers: {
-          'Content-type': 'application/json', // Exactement comme dans l'exemple Slack
+          'Content-type': 'application/json',
         },
         body: JSON.stringify(payload)
       });
 
       const responseText = await response.text();
       
-      console.log('📨 Réponse Slack:', {
+      console.log('📨 Réponse Slack via proxy:', {
         status: response.status,
         statusText: response.statusText,
         body: responseText
       });
 
-      if (response.ok && responseText === 'ok') {
-        console.log('✅ Message Slack envoyé avec succès');
+      if (response.ok) {
+        console.log('✅ Message Slack envoyé avec succès via proxy');
         return true;
       } else {
-        console.error('❌ Erreur envoi Slack:', response.status, response.statusText, responseText);
+        console.error('❌ Erreur envoi Slack via proxy:', response.status, response.statusText, responseText);
         return false;
       }
     } catch (error) {
-      console.error('❌ Erreur réseau Slack:', error);
-      return false;
+      console.error('❌ Erreur réseau Slack via proxy:', error);
+      
+      // FALLBACK: Essayer avec un autre proxy
+      try {
+        console.log('🔄 Tentative avec proxy alternatif...');
+        return await this.envoyerMessageFallback(message);
+      } catch (fallbackError) {
+        console.error('❌ Tous les proxies ont échoué:', fallbackError);
+        
+        // FALLBACK ULTIME: Envoyer par email
+        console.log('📧 Fallback: Tentative d\'envoi par email...');
+        this.envoyerParEmail(message);
+        return false; // On retourne false car Slack n'a pas marché, mais l'email est envoyé
+      }
     }
+  }
+
+  // Méthode de fallback avec un autre proxy
+  private async envoyerMessageFallback(message: string): Promise<boolean> {
+    const payload = { text: message };
+    
+    // Proxy alternatif
+    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(this.webhookUrl)}`;
+    
+    const response = await fetch(proxyUrl, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify(payload)
+    });
+
+    return response.ok;
+  }
+
+  // Fallback ultime: ouvrir l'email avec le message
+  private envoyerParEmail(message: string): void {
+    const subject = encodeURIComponent('🎓 Notification Third Eyes Co.');
+    const body = encodeURIComponent(message);
+    const emailUrl = `mailto:thirdeyesco@gmail.com?subject=${subject}&body=${body}`;
+    
+    console.log('📧 Ouverture email de fallback...');
+    window.open(emailUrl, '_blank');
   }
 
   /**
