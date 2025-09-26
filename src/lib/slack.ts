@@ -7,22 +7,6 @@ import { SLACK_CONFIG } from '@/config/payment';
  * INTERFACES POUR LES DONNÉES SLACK
  */
 
-// Structure d'un message Slack
-interface SlackMessage {
-  text: string;
-  blocks?: Array<{
-    type: string;
-    text?: {
-      type: string;
-      text: string;
-    };
-    fields?: Array<{
-      type: string;
-      text: string;
-    }>;
-  }>;
-}
-
 // Interface pour les données d'inscription (utilisée dans Slack)
 interface InscriptionData {
   nom_complet: string;
@@ -60,38 +44,36 @@ export class SlackService {
    * MÉTHODE PRIVÉE: Envoyer un message à Slack
    * @param payload - Le contenu du message à envoyer
    */
-  private async envoyerMessage(payload: SlackMessage): Promise<boolean> {
+  private async envoyerMessage(message: string): Promise<boolean> {
     console.log('📤 Tentative envoi Slack:', {
       webhookUrl: this.webhookUrl ? 'Configuré' : 'Non configuré',
-      payload: payload
+      message: message
     });
 
     // Si pas d'URL configurée, on simule l'envoi
     if (!this.webhookUrl || this.webhookUrl.trim() === '') {
-      console.log('📱 Simulation envoi Slack (pas d\'URL):', payload);
+      console.log('📱 Simulation envoi Slack (pas d\'URL):', message);
       return true;
     }
 
     try {
-      const messageComplet = {
-        ...payload,
-        username: SLACK_CONFIG.BOT_NAME,
-        icon_emoji: SLACK_CONFIG.BOT_EMOJI,
-        channel: SLACK_CONFIG.CHANNEL
+      // Format simple recommandé par Slack : {"text":"Hello, World!"}
+      const payload = {
+        text: message
       };
 
       console.log('📡 Envoi vers Slack:', {
         url: this.webhookUrl,
-        message: messageComplet
+        payload: payload
       });
 
-      // Envoi de la requête POST vers Slack
+      // Envoi de la requête POST vers Slack (format exact de l'exemple Slack)
       const response = await fetch(this.webhookUrl, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-type': 'application/json', // Exactement comme dans l'exemple Slack
         },
-        body: JSON.stringify(messageComplet)
+        body: JSON.stringify(payload)
       });
 
       const responseText = await response.text();
@@ -102,7 +84,7 @@ export class SlackService {
         body: responseText
       });
 
-      if (response.ok) {
+      if (response.ok && responseText === 'ok') {
         console.log('✅ Message Slack envoyé avec succès');
         return true;
       } else {
@@ -123,8 +105,18 @@ export class SlackService {
   async notifierNouvelleInscription(data: InscriptionData): Promise<boolean> {
     console.log('📤 Envoi notification nouvelle inscription pour:', data.nom_complet);
     
-    // Génération du message à partir du template
-    const message = SLACK_CONFIG.TEMPLATES.NOUVELLE_INSCRIPTION(data);
+    // Message simple et clair pour Slack
+    const message = `🎓 NOUVELLE INSCRIPTION - Third Eyes Co.
+
+👤 Nom: ${data.nom_complet}
+📧 Email: ${data.email}
+📱 Téléphone: ${data.telephone}
+🏙️ Ville: ${data.ville}
+📚 Formation: ${data.formation_specifique}
+💰 Prix: ${data.prix.toLocaleString()} FCFA
+📍 Mode: ${data.mode_formation}
+
+✅ Inscription enregistrée avec succès !`;
     
     return await this.envoyerMessage(message);
   }
@@ -147,11 +139,22 @@ export class SlackService {
     
     // Formatage du type de paiement pour l'affichage
     const typePaiementTexte = typePaiement === 'total' 
-      ? `Paiement total (${operateur.toUpperCase()})` 
-      : `Frais d'inscription (${operateur.toUpperCase()})`;
+      ? 'Paiement total' 
+      : 'Frais d\'inscription (5 000 FCFA)';
     
-    // Génération du message à partir du template
-    const message = SLACK_CONFIG.TEMPLATES.TENTATIVE_PAIEMENT(data, typePaiementTexte, montant);
+    // Message simple et urgent pour Slack
+    const message = `💳 TENTATIVE DE PAIEMENT - Third Eyes Co.
+
+🚨 ACTION REQUISE DANS 15 MINUTES !
+
+👤 Nom: ${data.nom_complet}
+📱 Téléphone: ${data.telephone}
+📧 Email: ${data.email}
+💰 Type: ${typePaiementTexte}
+💵 Montant: ${montant.toLocaleString()} FCFA
+📱 Opérateur: ${operateur.toUpperCase()}
+
+⏰ Contacter le client maintenant pour confirmer le paiement !`;
     
     return await this.envoyerMessage(message);
   }
@@ -163,18 +166,13 @@ export class SlackService {
   async testerConnexion(): Promise<boolean> {
     console.log('🧪 Test de connexion Slack...');
     
-    const messageTest = {
-      text: "🧪 Test de connexion Third Eyes Bot",
-      blocks: [
-        {
-          type: "section",
-          text: {
-            type: "mrkdwn",
-            text: "✅ La connexion Slack fonctionne correctement !\n🤖 Bot configuré pour les notifications d'inscription."
-          }
-        }
-      ]
-    };
+    const messageTest = `🧪 TEST DE CONNEXION - Third Eyes Bot
+
+✅ La connexion Slack fonctionne correctement !
+🤖 Bot configuré pour les notifications d'inscription.
+📅 Test effectué le ${new Date().toLocaleString('fr-FR')}
+
+🎯 Prêt à recevoir les notifications d'inscription et de paiement !`;
 
     return await this.envoyerMessage(messageTest);
   }
