@@ -159,10 +159,10 @@ export class SlackService {
    * @param data - Les données de l'inscription
    */
   async notifierNouvelleInscription(data: InscriptionData): Promise<boolean> {
-  console.log('📤 Envoi notification nouvelle inscription pour:', data.nom_complet);
+    console.log('📤 Envoi notification nouvelle inscription pour:', data.nom_complet);
 
-  // Message simple et clair pour Slack
-  const message = `🎓 NOUVELLE INSCRIPTION - Third Eyes Co.
+    // Message simple et clair pour Slack
+    const message = `🎓 NOUVELLE INSCRIPTION - Third Eyes Co.
 
 👤 Nom: ${data.nom_complet}
 📧 Email: ${data.email}
@@ -174,8 +174,8 @@ export class SlackService {
 
 ✅ Inscription enregistrée avec succès !`;
 
-  return await this.envoyerMessage(message);
-}
+    return await this.envoyerMessage(message);
+  }
 
   /**
    * NOTIFIER UNE TENTATIVE DE PAIEMENT
@@ -191,15 +191,15 @@ export class SlackService {
   montant: number,
   operateur: 'flooz' | 'mixx'
 ): Promise<boolean> {
-  console.log('📤 Envoi notification tentative paiement pour:', data.nom_complet);
+    console.log('📤 Envoi notification tentative paiement pour:', data.nom_complet);
 
-  // Formatage du type de paiement pour l'affichage
-  const typePaiementTexte = typePaiement === 'total'
-    ? 'Paiement total'
-    : 'Frais d\'inscription (5 000 FCFA)';
+    // Formatage du type de paiement pour l'affichage
+    const typePaiementTexte = typePaiement === 'total'
+      ? 'Paiement total'
+      : 'Frais d\'inscription (5 000 FCFA)';
 
-  // Message simple et urgent pour Slack
-  const message = `💳 TENTATIVE DE PAIEMENT - Third Eyes Co.
+    // Message simple et urgent pour Slack
+    const message = `💳 TENTATIVE DE PAIEMENT - Third Eyes Co.
 
 🚨 ACTION REQUISE DANS 15 MINUTES !
 
@@ -212,17 +212,17 @@ export class SlackService {
 
 ⏰ Contacter le client maintenant pour confirmer le paiement !`;
 
-  return await this.envoyerMessage(message);
-}
+    return await this.envoyerMessage(message);
+  }
 
   /**
    * TESTER LA CONNEXION SLACK
    * Envoie un message de test pour vérifier que tout fonctionne
    */
   async testerConnexion(): Promise<boolean> {
-  console.log('🧪 Test de connexion Slack...');
+    console.log('🧪 Test de connexion Slack...');
 
-  const messageTest = `🧪 TEST DE CONNEXION - Third Eyes Bot
+    const messageTest = `🧪 TEST DE CONNEXION - Third Eyes Bot
 
 ✅ La connexion Slack fonctionne correctement !
 🤖 Bot configuré pour les notifications d'inscription.
@@ -230,8 +230,8 @@ export class SlackService {
 
 🎯 Prêt à recevoir les notifications d'inscription et de paiement !`;
 
-  return await this.envoyerMessage(messageTest);
-}
+    return await this.envoyerMessage(messageTest);
+  }
 }
 
 /**
