@@ -49,6 +49,14 @@ jobs:
       
     # Étape 5: Build du projet pour production
     - name: Build project
+      env:
+        VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+        VITE_SUPABASE_ANON_KEY: ${{ vars.VITE_SUPABASE_ANON_KEY }}
+        VITE_WHATSAPP_NUMBER: ${{ vars.VITE_WHATSAPP_NUMBER }}
+        VITE_CONTACT_EMAIL: ${{ vars.VITE_CONTACT_EMAIL }}
+        VITE_SLACK_WEBHOOK_URL: ${{ vars.VITE_SLACK_WEBHOOK_URL }}
+        VITE_FLOOZ_NUMBER: ${{ vars.VITE_FLOOZ_NUMBER }}
+        VITE_MIXX_NUMBER: ${{ vars.VITE_MIXX_NUMBER }}
       run: npm run build:github
       
     # Étape 6: Upload des fichiers buildés

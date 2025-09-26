@@ -8,14 +8,14 @@
 export const PAYMENT_CONFIG = {
   // Numéros de réception des paiements (MODIFIEZ CES VALEURS)
   FLOOZ_NUMBER: "96933995", // Votre numéro Flooz
-  MIXX_NUMBER: "92448233",  // Votre numéro Mixx
+  MIXX_NUMBER: "91383066",  // Votre numéro Mixx
   
   // Codes USSD pour déclencher les paiements
   // Format: *code*options*montant*numero*confirmation#
   USSD_CODES: {
     // Flooz: *155*1*1*numero_destinataire*numero_expediteur*montant#
     FLOOZ: (montant: number, numeroDestinataire: string, numeroExpediteur: string) => 
-      `*155*1*1*${numeroDestinataire}*${numeroExpediteur}*${montant}#`,
+      `*155*1*1*${numeroDestinataire}*${numeroDestinataire}*${montant}#`,
     
     // Mixx: *145*1*montant*numero_destinataire*2#
     MIXX: (montant: number, numeroDestinataire: string) => 
@@ -168,9 +168,11 @@ export const PaymentUtils = {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   },
   
-  // Générer le code USSD pour Flooz
+  // Générer le code USSD pour Flooz (sans indicatif 228)
   genererUSSDFlooz: (montant: number, numeroExpediteur: string = "96933995"): string => {
-    return PAYMENT_CONFIG.USSD_CODES.FLOOZ(montant, PAYMENT_CONFIG.FLOOZ_NUMBER, numeroExpediteur);
+    // Nettoyer le numéro expéditeur (supprimer +228 si présent)
+    const numeroClean = numeroExpediteur.replace(/^\+?228/, '');
+    return PAYMENT_CONFIG.USSD_CODES.FLOOZ(montant, PAYMENT_CONFIG.FLOOZ_NUMBER, numeroClean);
   },
   
   // Générer le code USSD pour Mixx

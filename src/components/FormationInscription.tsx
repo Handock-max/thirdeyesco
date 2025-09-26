@@ -178,8 +178,9 @@ const FormationInscription: React.FC = () => {
         
         // Notification Slack de la nouvelle inscription
         try {
-          await notifierInscription(inscriptionData);
-          console.log('📱 Notification Slack envoyée');
+          console.log('📤 Tentative notification Slack inscription...');
+          const slackResult = await notifierInscription(inscriptionData);
+          console.log('📱 Résultat notification Slack:', slackResult);
         } catch (slackError) {
           console.warn('⚠️ Erreur notification Slack:', slackError);
           // On continue même si Slack échoue
@@ -510,7 +511,7 @@ const FormationInscription: React.FC = () => {
                       <SelectItem key={formation.id} value={formation.id}>
                         <div className="flex justify-between items-center w-full">
                           <span>{formation.nom}</span>
-                          <span className="font-bold text-primary ml-4">
+                          <span className="font-bold text-white bg-primary px-2 py-1 rounded ml-4">
                             {formation.prix.toLocaleString()} FCFA
                           </span>
                         </div>

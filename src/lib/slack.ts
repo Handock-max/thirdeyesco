@@ -46,6 +46,11 @@ export class SlackService {
     // Récupération de l'URL du webhook depuis les variables d'environnement
     this.webhookUrl = SLACK_CONFIG.WEBHOOK_URL;
     
+    console.log('🔧 Configuration Slack:', {
+      webhookConfigured: !!this.webhookUrl,
+      webhookUrl: this.webhookUrl ? 'Configuré' : 'Non configuré'
+    });
+    
     if (!this.webhookUrl) {
       console.warn('⚠️ URL Slack webhook non configurée. Les notifications ne seront pas envoyées.');
     }
@@ -56,32 +61,52 @@ export class SlackService {
    * @param payload - Le contenu du message à envoyer
    */
   private async envoyerMessage(payload: SlackMessage): Promise<boolean> {
+    console.log('📤 Tentative envoi Slack:', {
+      webhookUrl: this.webhookUrl ? 'Configuré' : 'Non configuré',
+      payload: payload
+    });
+
     // Si pas d'URL configurée, on simule l'envoi
-    if (!this.webhookUrl) {
-      console.log('📱 Simulation envoi Slack:', payload);
+    if (!this.webhookUrl || this.webhookUrl.trim() === '') {
+      console.log('📱 Simulation envoi Slack (pas d\'URL):', payload);
       return true;
     }
 
     try {
+      const messageComplet = {
+        ...payload,
+        username: SLACK_CONFIG.BOT_NAME,
+        icon_emoji: SLACK_CONFIG.BOT_EMOJI,
+        channel: SLACK_CONFIG.CHANNEL
+      };
+
+      console.log('📡 Envoi vers Slack:', {
+        url: this.webhookUrl,
+        message: messageComplet
+      });
+
       // Envoi de la requête POST vers Slack
       const response = await fetch(this.webhookUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          ...payload,
-          username: SLACK_CONFIG.BOT_NAME,
-          icon_emoji: SLACK_CONFIG.BOT_EMOJI,
-          channel: SLACK_CONFIG.CHANNEL
-        })
+        body: JSON.stringify(messageComplet)
+      });
+
+      const responseText = await response.text();
+      
+      console.log('📨 Réponse Slack:', {
+        status: response.status,
+        statusText: response.statusText,
+        body: responseText
       });
 
       if (response.ok) {
         console.log('✅ Message Slack envoyé avec succès');
         return true;
       } else {
-        console.error('❌ Erreur envoi Slack:', response.status, response.statusText);
+        console.error('❌ Erreur envoi Slack:', response.status, response.statusText, responseText);
         return false;
       }
     } catch (error) {
