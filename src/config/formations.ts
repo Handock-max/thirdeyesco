@@ -4,13 +4,13 @@
 export const COMPANY_CONFIG = {
   // INFORMATIONS DE L'ENTREPRISE - À PERSONNALISER
   nom: "Third Eyes Co.",
-  whatsappNumber: "+22500000000", // REMPLACER par votre numéro WhatsApp réel
-  email: "contact@thirdeyes.co", // REMPLACER par votre email
-  
+  whatsappNumber: "+22896933995", // REMPLACER par votre numéro WhatsApp réel
+  email: "cthirdeyes@gmail.com", // REMPLACER par votre email
+
   // MESSAGE DE BIENVENUE
   tagline: "Formations Data Science & Intelligence Artificielle",
   description: "Développez vos compétences en Data Science et IA avec nos formations professionnelles. Des programmes conçus pour vous donner une longueur d'avance dans l'économie numérique.",
-  
+
   // STATISTIQUES AFFICHÉES
   stats: {
     modules: 4,
@@ -24,63 +24,63 @@ export const COMPANY_CONFIG = {
 export const FORMATIONS_CONFIG = {
   // Formations individuelles (2 jours chacune)
   individuelle: [
-    { 
-      id: 'data-debutant', 
-      nom: 'Data Débutant (2 jours)', 
+    {
+      id: 'data-debutant',
+      nom: 'Data Débutant (2 jours)',
       prix: 25000,
       description: 'Introduction à la Data Science : Excel, Power BI, bases SQL'
     },
-    { 
-      id: 'data-intermediaire', 
-      nom: 'Data Intermédiaire (2 jours)', 
+    {
+      id: 'data-intermediaire',
+      nom: 'Data Intermédiaire (2 jours)',
       prix: 35000,
       description: 'Python pour la Data, Pandas, visualisation avancée'
     },
-    { 
-      id: 'ia-debutant', 
-      nom: 'IA Débutant (2 jours)', 
+    {
+      id: 'ia-debutant',
+      nom: 'IA Débutant (2 jours)',
       prix: 25000,
-      description: 'Introduction à l\'IA : Machine Learning, algorithmes de base'
+      description: 'Introduction à l\'IA : Machine Learning, algorithmes de base, prompting'
     },
-    { 
-      id: 'ia-intermediaire', 
-      nom: 'IA Intermédiaire (2 jours)', 
+    {
+      id: 'ia-intermediaire',
+      nom: 'IA Intermédiaire (2 jours)',
       prix: 35000,
-      description: 'Deep Learning, réseaux de neurones, projets pratiques'
+      description: 'Chatbot, projets pratiques'
     }
   ],
-  
+
   // Packs combinés (4 jours) - ÉCONOMIE GARANTIE
   pack: [
-    { 
-      id: 'pack-debutant', 
-      nom: 'Pack Débutant (Data + IA, 4 jours)', 
-      prix: 55000, // Économie de 15 000 FCFA vs prix individuel
+    {
+      id: 'pack-debutant',
+      nom: 'Pack Débutant (Data + IA, 4 jours)',
+      prix: 40000, // Économie de 5 000 FCFA vs prix individuel
       description: 'Combinaison parfaite pour débuter : Data + IA niveau débutant'
     },
-    { 
-      id: 'pack-intermediaire', 
-      nom: 'Pack Intermédiaire (Data + IA, 4 jours)', 
-      prix: 55000, // Économie de 15 000 FCFA vs prix individuel
+    {
+      id: 'pack-intermediaire',
+      nom: 'Pack Intermédiaire (Data + IA, 4 jours)',
+      prix: 65000, // Économie de 5 000 FCFA vs prix individuel
       description: 'Programme intensif : Data + IA niveau intermédiaire'
     }
   ],
-  
+
   // Cycle complet (8 jours) - FORMATION COMPLÈTE
   cycle: [
-    { 
-      id: 'cycle-complet', 
-      nom: 'Cycle complet (8 jours)', 
+    {
+      id: 'cycle-complet',
+      nom: 'Cycle complet (8 jours)',
       prix: 100000, // Économie de 20 000 FCFA vs tous les modules
-      description: 'Formation complète : tous les modules du débutant à l\'expert'
+      description: 'Formation complète : tous les modules du débutant à l\'intermédiaire'
     }
   ]
 };
 
 // CENTRES D'INTÉRÊT DISPONIBLES - AJOUTER/MODIFIER SELON VOS BESOINS
 export const CENTRES_INTERET = [
-  'Data Analysis',
-  'Data Visualization', 
+  'Analyse de Données',
+  'Data Visualization',
   'Business Intelligence',
   'Intelligence Artificielle',
   'Storytelling & Communication avec les données',
@@ -120,26 +120,26 @@ export const MESSAGES = {
     cta: "Je m'inscris",
     subtext: "🎯 Places limitées • ⚡ Inscription rapide • 📞 Support personnel"
   },
-  
+
   success: {
     titre: "Inscription réussie !",
     description: "Vous recevrez un email de confirmation sous 24h.",
     whatsappCta: "Nous contacter sur WhatsApp",
     newInscription: "Nouvelle inscription"
   },
-  
+
   form: {
     etapes: [
       "Vos informations",
-      "Votre formation", 
+      "Votre formation",
       "Modalités",
       "Confirmation"
     ],
-    
+
     placeholders: {
       nomComplet: "Votre nom et prénom",
       email: "votre@email.com",
-      telephone: "+225 XX XX XX XX",
+      telephone: "+228 XX XX XX XX",
       ville: "Votre ville",
       motivation: "Partagez vos motivations et objectifs avec cette formation..."
     }
@@ -177,12 +177,12 @@ export const VALIDATION_RULES = {
 // CONFIGURATION SUPABASE - À CONFIGURER APRÈS CONNEXION
 export const SUPABASE_CONFIG = {
   tableInscriptions: 'inscriptions_formation',
-  
+
   // Structure de données pour Supabase
   colonnes: [
     'nom_complet',
     'email',
-    'telephone', 
+    'telephone',
     'ville',
     'type_formation',
     'formation_specifique',

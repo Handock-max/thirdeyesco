@@ -4,10 +4,10 @@ import { createClient } from '@supabase/supabase-js';
 // Ces variables d'environnement doivent être définies dans le fichier .env
 
 // URL de votre projet Supabase (à remplacer par votre vraie URL)
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://mfgxddzvsjnoehonwyci.supabase.co';
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
 
 // Clé anonyme de votre projet Supabase (à remplacer par votre vraie clé)
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1mZ3hkZHp2c2pub2Vob253eWNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgwMzU4MDQsImV4cCI6MjA3MzYxMTgwNH0.o0G2oDm8wqHHpJRkF-5TUPWH0D6gj-zyuPPb3FSG7l8';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
 // Création du client Supabase
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
