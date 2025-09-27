@@ -395,7 +395,7 @@ const FormationInscription: React.FC = () => {
 
 Merci de confirmer la réception.`;
 
-                    const numeroWhatsApp = "+22896933995"; // Ou depuis les variables d'env
+                    const numeroWhatsApp = "+22893858934"; // Ou depuis les variables d'env
                     const whatsappUrl = `https://wa.me/${numeroWhatsApp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message)}`;
                     window.open(whatsappUrl, '_blank');
                   }}
