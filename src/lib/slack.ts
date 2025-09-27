@@ -151,7 +151,6 @@ export class SlackService {
     console.log('📧 Ouverture email de fallback...');
     window.open(emailUrl, '_blank');
   }
-}
 
   /**
    * NOTIFIER UNE NOUVELLE INSCRIPTION
@@ -186,11 +185,11 @@ export class SlackService {
    * @param operateur - 'flooz' ou 'mixx'
    */
   async notifierTentativePaiement(
-  data: InscriptionData,
-  typePaiement: 'total' | 'frais',
-  montant: number,
-  operateur: 'flooz' | 'mixx'
-): Promise<boolean> {
+    data: InscriptionData,
+    typePaiement: 'total' | 'frais',
+    montant: number,
+    operateur: 'flooz' | 'mixx'
+  ): Promise<boolean> {
     console.log('📤 Envoi notification tentative paiement pour:', data.nom_complet);
 
     // Formatage du type de paiement pour l'affichage
