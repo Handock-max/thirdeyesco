@@ -289,8 +289,16 @@ const FormationInscription: React.FC = () => {
           style={{ backgroundImage: `url(${thirdEyesLogo})` }}
         />
 
-        {/* Bouton de basculement de thème en haut à droite */}
-        <div className="absolute top-4 right-4 z-10">
+        {/* Boutons en haut à droite */}
+        <div className="absolute top-4 right-4 z-10 flex space-x-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={retourAccueil}
+            className="text-muted-foreground hover:text-foreground"
+          >
+            ← Quitter
+          </Button>
           <ThemeToggle />
         </div>
 
@@ -336,8 +344,16 @@ const FormationInscription: React.FC = () => {
           style={{ backgroundImage: `url(${thirdEyesLogo})` }}
         />
 
-        {/* Bouton de basculement de thème en haut à droite */}
-        <div className="absolute top-4 right-4 z-10">
+        {/* Boutons en haut à droite */}
+        <div className="absolute top-4 right-4 z-10 flex space-x-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={retourAccueil}
+            className="text-muted-foreground hover:text-foreground"
+          >
+            ← Quitter
+          </Button>
           <ThemeToggle />
         </div>
 
@@ -378,7 +394,7 @@ const FormationInscription: React.FC = () => {
 ✅ J'ai effectué le paiement, je vous envoie la preuve de paiement ci-joint.
 
 Merci de confirmer la réception.`;
-                    
+
                     const numeroWhatsApp = "+22896933995"; // Ou depuis les variables d'env
                     const whatsappUrl = `https://wa.me/${numeroWhatsApp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message)}`;
                     window.open(whatsappUrl, '_blank');
@@ -460,7 +476,7 @@ Merci de confirmer la réception.`;
                   className="modern-input"
                   value={formData.telephone}
                   onChange={(e) => handleInputChange('telephone', e.target.value)}
-                  placeholder="+225 XX XX XX XX"
+                  placeholder="+228 00 00 00 00"
                 />
               </div>
 
@@ -752,8 +768,16 @@ Merci de confirmer la réception.`;
         style={{ backgroundImage: `url(${thirdEyesLogo})` }}
       />
 
-      {/* Bouton de basculement de thème en haut à droite */}
-      <div className="absolute top-4 right-4 z-10">
+      {/* Boutons en haut à droite */}
+      <div className="absolute top-4 right-4 z-10 flex space-x-2">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={retourAccueil}
+          className="text-muted-foreground hover:text-foreground"
+        >
+          ← Quitter
+        </Button>
         <ThemeToggle />
       </div>
 
@@ -786,15 +810,27 @@ Merci de confirmer la réception.`;
 
           {/* Navigation */}
           <div className="flex justify-between pt-6 border-t border-card-border">
-            <Button
-              variant="outline"
-              onClick={prevStep}
-              disabled={currentStep === 0}
-              className="flex items-center"
-            >
-              <ChevronLeft className="w-4 h-4 mr-1" />
-              Précédent
-            </Button>
+            <div className="flex space-x-2">
+              <Button
+                variant="outline"
+                onClick={prevStep}
+                disabled={currentStep === 0}
+                className="flex items-center"
+              >
+                <ChevronLeft className="w-4 h-4 mr-1" />
+                Précédent
+              </Button>
+
+              {/* Bouton Quitter dans la navigation */}
+              <Button
+                variant="ghost"
+                onClick={retourAccueil}
+                className="text-muted-foreground hover:text-foreground"
+                size="sm"
+              >
+                Quitter
+              </Button>
+            </div>
 
             {currentStep < 3 ? (
               <Button
