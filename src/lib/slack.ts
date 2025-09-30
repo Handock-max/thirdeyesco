@@ -17,6 +17,8 @@ interface InscriptionData {
   prix: number;
   type_formation: string;
   mode_formation: string;
+  motivation: string;
+  centres_interet: string[];
 }
 
 /**
@@ -170,6 +172,8 @@ export class SlackService {
 📚 Formation: ${data.formation_specifique}
 💰 Prix: ${data.prix.toLocaleString()} FCFA
 📍 Mode: ${data.mode_formation}
+📝 Motivation: ${data.motivation}
+🎯 Centres d'intérêt: ${data.centres_interet.join(', ')}
 
 ✅ Inscription enregistrée avec succès !`;
 

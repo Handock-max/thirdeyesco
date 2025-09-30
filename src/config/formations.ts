@@ -4,7 +4,7 @@
 export const COMPANY_CONFIG = {
   // INFORMATIONS DE L'ENTREPRISE - À PERSONNALISER
   nom: "Third Eyes Co.",
-  whatsappNumber: "+22896933995", // REMPLACER par votre numéro WhatsApp réel
+  whatsappNumber: "+22893858934", // REMPLACER par votre numéro WhatsApp réel
   email: "cthirdeyes@gmail.com", // REMPLACER par votre email
 
   // MESSAGE DE BIENVENUE

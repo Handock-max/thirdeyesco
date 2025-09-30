@@ -49,8 +49,8 @@ const FORMATIONS_CONFIG = {
     { id: 'ia-intermediaire', nom: 'IA Intermédiaire (2 jours)', prix: 35000 }
   ],
   pack: [
-    { id: 'pack-debutant', nom: 'Pack Débutant (Data Analyse + IA, 4 jours)', prix: 55000 },
-    { id: 'pack-intermediaire', nom: 'Pack Intermédiaire (Data Analyse + IA, 4 jours)', prix: 55000 }
+    { id: 'pack-debutant', nom: 'Pack Débutant (Data Analyse + IA, 4 jours)', prix: 45000 },
+    { id: 'pack-intermediaire', nom: 'Pack Intermédiaire (Data Analyse + IA, 4 jours)', prix: 65000 }
   ],
   cycle: [
     { id: 'cycle-complet', nom: 'Cycle complet (8 jours)', prix: 100000 }
@@ -88,6 +88,7 @@ const FormationInscription: React.FC = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showPayment, setShowPayment] = useState(false); // NOUVEAU: pour afficher les options de paiement
   const [paymentInitiated, setPaymentInitiated] = useState(false); // NOUVEAU: pour tracker si le paiement a été initié
+  const [showContactOptions, setShowContactOptions] = useState(false); // NOUVEAU: étape contact (mobile)
 
   const { toast } = useToast();
 
@@ -272,12 +273,98 @@ const FormationInscription: React.FC = () => {
     window.location.reload();
   };
 
-  // Fonction pour contacter WhatsApp
+  // Récupérer le libellé de la formation par son id
+  const getFormationLabel = (type: string, id: string): string => {
+    const configs = FORMATIONS_CONFIG[type as keyof typeof FORMATIONS_CONFIG] || [];
+    return configs.find(f => f.id === id)?.nom || id;
+  };
+
+  // Construire le message WhatsApp récapitulatif
+  const buildWhatsAppRecapMessage = (): string => {
+    const formationNom = getFormationLabel(formData.typeFormation, formData.formationSpecifique);
+    const montant = formData.prix > 0 ? `${formData.prix.toLocaleString()} FCFA` : '—';
+    return `Bonjour Third Eyes Co. 👋\n\n` +
+      `Je viens de finaliser mon inscription. Voici mon récapitulatif :\n\n` +
+      `👤 Nom : ${formData.nomComplet}\n` +
+      `📚 Formation : ${formationNom}\n` +
+      `💰 Montant : ${montant}\n\n` +
+      `Merci de me confirmer la suite. 🙏`;
+  };
+
+  // Fonction pour contacter WhatsApp (générique)
   const contactWhatsApp = () => {
-    const message = `Bonjour, je viens de m'inscrire à la formation ${formData.formationSpecifique}. Mon nom est ${formData.nomComplet}.`;
+    const message = buildWhatsAppRecapMessage();
     const url = getWhatsAppUrl(message);
     window.open(url, '_blank');
   };
+
+  // Aller à l'étape Contact (mobile) après avoir choisi de passer le paiement
+  const allerEtapeContact = () => {
+    setShowContactOptions(true);
+  };
+
+  // Vue: Étape Contact (mobile) avec 2 boutons
+  if (showContactOptions) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+        {/* Logo en arrière-plan flouté */}
+        <div
+          className="logo-backdrop"
+          style={{ backgroundImage: `url(${thirdEyesLogo})` }}
+        />
+
+        {/* Boutons en haut à droite */}
+        <div className="absolute top-4 right-4 z-10 flex space-x-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={retourAccueil}
+            className="text-muted-foreground hover:text-foreground"
+          >
+            ← Quitter
+          </Button>
+          <ThemeToggle />
+        </div>
+
+        <Card className="glass-card w-full max-w-lg fade-in">
+          <CardContent className="p-8 text-center">
+            <div className="mb-6 flex justify-center">
+              <div className="w-20 h-20 bg-gradient-primary rounded-full flex items-center justify-center">
+                <Users className="w-10 h-10 text-white" />
+              </div>
+            </div>
+
+            <h2 className="text-2xl font-bold mb-4 text-foreground">
+              Besoin d'aide immédiate ?
+            </h2>
+
+            <p className="text-muted-foreground mb-6">
+              Vous pouvez nous écrire sur WhatsApp maintenant ou revenir à l'accueil.
+            </p>
+
+            <div className="space-y-3">
+              <Button
+                onClick={contactWhatsApp}
+                className="btn-primary-glow w-full"
+                size="lg"
+              >
+                <Users className="w-5 h-5 mr-2" />
+                Nous contacter sur WhatsApp
+              </Button>
+
+              <Button
+                variant="outline"
+                onClick={retourAccueil}
+                className="w-full"
+              >
+                Quitter
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   // Rendu des options de paiement (mobile uniquement)
   if (showPayment) {
@@ -319,11 +406,11 @@ const FormationInscription: React.FC = () => {
             onPaymentInitiated={handlePaymentInitiated}
           />
 
-          {/* Bouton pour passer le paiement et retourner à l'accueil */}
+          {/* Bouton pour passer le paiement et accéder à l'étape Contact (mobile) */}
           <div className="mt-6 text-center">
             <Button
               variant="outline"
-              onClick={retourAccueil}
+              onClick={allerEtapeContact}
               className="w-full"
             >
               Passer le paiement pour l'instant
@@ -395,8 +482,8 @@ const FormationInscription: React.FC = () => {
 
 Merci de confirmer la réception.`;
 
-                    const numeroWhatsApp = "+22893858934"; // Ou depuis les variables d'env
-                    const whatsappUrl = `https://wa.me/${numeroWhatsApp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message)}`;
+                    const numeroWhatsApp = (import.meta.env.VITE_WHATSAPP_NUMBER || "+22893858934").replace(/[^0-9]/g, "");
+                    const whatsappUrl = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(message)}`;
                     window.open(whatsappUrl, '_blank');
                   }}
                   className="btn-primary-glow w-full"
