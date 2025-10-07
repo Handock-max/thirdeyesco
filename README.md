@@ -221,11 +221,11 @@ Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
 
 ## 📞 Support
 
-- 📧 Email : contact@thirdeyesco.com
-- 💬 WhatsApp : +22500000000
+- 📧 Email : martindetours98.com
+- 💬 WhatsApp : +22896933995
 - 🐛 Issues : [GitHub Issues](https://github.com/your-username/thirdeyesco/issues)
 
-## 🙏 Remerciements
+## 🙏 Ressources
 
 - [React](https://reactjs.org/) - Framework JavaScript
 - [Tailwind CSS](https://tailwindcss.com/) - Framework CSS
@@ -235,6 +235,6 @@ Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
 
 ---
 
-**Développé avec ❤️ par Third Eyes Co.**
+**Développé avec ❤️ pour Third Eyes Co.**
 
 *Transformez votre carrière avec nos formations en Data Science et IA*
