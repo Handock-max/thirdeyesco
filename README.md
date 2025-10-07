@@ -221,7 +221,7 @@ Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
 
 ## 📞 Support
 
-- 📧 Email : martindetours98.com
+- 📧 Email : martindetours98@gmail.com
 - 💬 WhatsApp : +22896933995
 - 🐛 Issues : [GitHub Issues](https://github.com/your-username/thirdeyesco/issues)
 
