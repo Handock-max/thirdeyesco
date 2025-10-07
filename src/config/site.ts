@@ -12,7 +12,7 @@ export const SITE_CONFIG = {
   DESCRIPTION: 'Formations professionnelles en Data Science et Intelligence Artificielle',
   
   // Contact
-  WHATSAPP_NUMBER: '+22893858934',
+  WHATSAPP_NUMBER: '+22896933995',
   CONTACT_EMAIL: 'cthirdeyes@gmail.com',
   
   // Réseaux sociaux (à personnaliser)
