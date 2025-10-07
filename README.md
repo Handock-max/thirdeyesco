@@ -3,7 +3,7 @@
 > **Formations professionnelles en Data Science et Intelligence Artificielle**  
 > Développez vos compétences avec nos programmes conçus pour l'économie numérique.
 
-[![Deploy to GitHub Pages](https://github.com/your-username/thirdeyesco/actions/workflows/deploy.yml/badge.svg)](https://github.com/your-username/thirdeyesco/actions/workflows/deploy.yml)
+
 [![React](https://img.shields.io/badge/React-18.3.1-blue.svg)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue.svg)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4.17-blue.svg)](https://tailwindcss.com/)
